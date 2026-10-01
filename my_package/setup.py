@@ -27,6 +27,7 @@ setup(
     'console_scripts': [
             'publisher = my_package.publisher:main',
             'subscriber = my_package.subscriber:main',  
+            'positioner = my_package.positioner:main',  
         ],
     },
 )

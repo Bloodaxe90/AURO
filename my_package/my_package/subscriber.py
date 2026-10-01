@@ -2,7 +2,7 @@ import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 
-from geometry_msgs.msg import PoseStamped
+from nav_msgs.msg import Odometry
 
 
 class MinimalSubscriber(Node):
@@ -10,14 +10,13 @@ class MinimalSubscriber(Node):
     def __init__(self):
         super().__init__('minimal_subscriber')
         self.subscription = self.create_subscription(
-            PoseStamped,
+            Odometry,
             '/odom',
             self.listener_callback,
             10)
-        self.subscription  # prevent unused variable warning
 
-    def listener_callback(self, msg: PoseStamped):
-        self.get_logger().info(f"Subscribed {msg.pose.position}")
+    def listener_callback(self, msg: Odometry):
+        self.get_logger().info(f"Subscribed {msg.pose.pose.position}")
 
 
 def main(args=None):
