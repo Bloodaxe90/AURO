@@ -16,7 +16,7 @@ class MinimalPublisher(Node):
 
     def timer_callback(self):
         msg = TwistStamped()
-        msg.twist.angular.z = 1
+        msg.twist.angular.z = 1.0
         self.publisher_.publish(msg)
         self.get_logger().info(f'Publishing {msg.twist}')
 
