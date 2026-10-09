@@ -35,7 +35,7 @@ def generate_launch_description():
 
     # Our MoveItPy program
     move_robot_node = Node(
-        package="week2_lab",
+        package="my_week_2",
         executable="move_robot",
         output="screen",
         parameters=[moveit_config.to_dict()],

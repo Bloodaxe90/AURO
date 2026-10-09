@@ -33,9 +33,9 @@ def main():
     goal.pose.orientation.w = 1.0
 
     # End-effector target position
-    goal.pose.position.x = 0.5
-    goal.pose.position.y = -0.20
-    goal.pose.position.z = 0.50
+    goal.pose.position.x = 0.40
+    goal.pose.position.y = 0.40
+    goal.pose.position.z = 0.40
 
     # panda_link8 should reach this pose
     arm.set_goal_state(
