@@ -1,3 +1,5 @@
+import os
+from glob import glob
 from setuptools import find_packages, setup
 
 package_name = 'my_week_2'
@@ -10,6 +12,8 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        (os.path.join('share', package_name, 'launch'),
+        glob('launch/*.launch.py'))
     ],
     package_data={'': ['py.typed']},
     install_requires=['setuptools'],
@@ -25,9 +29,7 @@ setup(
     },
     entry_points={
     'console_scripts': [
-            'publisher = my_package.publisher:main',
-            'subscriber = my_package.subscriber:main',  
-            'positioner = my_package.positioner:main',  
+            'move_robot = my_week_2.move_robot:main', 
         ],
     },
 )

@@ -1,0 +1,24 @@
+[1.016s] Invoking command in '/workspaces/AURO2026/my_week_2/build/my_week_2': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/workspaces/AURO2026/my_week_2/build/my_week_2/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/workspaces/AURO2026/my_week_2/install/my_week_2/lib/python3.14/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /workspaces/AURO2026/my_week_2/build/my_week_2/build --no-deps symlink_data
+[1.261s] running develop
+[1.411s] running egg_info
+[1.426s] creating my_week_2.egg-info
+[1.426s] writing my_week_2.egg-info/PKG-INFO
+[1.427s] writing dependency_links to my_week_2.egg-info/dependency_links.txt
+[1.427s] writing entry points to my_week_2.egg-info/entry_points.txt
+[1.427s] writing requirements to my_week_2.egg-info/requires.txt
+[1.427s] writing top-level names to my_week_2.egg-info/top_level.txt
+[1.427s] writing manifest file 'my_week_2.egg-info/SOURCES.txt'
+[1.458s] reading manifest file 'my_week_2.egg-info/SOURCES.txt'
+[1.458s] writing manifest file 'my_week_2.egg-info/SOURCES.txt'
+[1.474s] running build_ext
+[1.474s] Creating /workspaces/AURO2026/my_week_2/install/my_week_2/lib/python3.14/site-packages/my-week-2.egg-link (link to .)
+[1.474s] Installing positioner script to /workspaces/AURO2026/my_week_2/install/my_week_2/lib/my_week_2
+[1.474s] Installing publisher script to /workspaces/AURO2026/my_week_2/install/my_week_2/lib/my_week_2
+[1.474s] Installing subscriber script to /workspaces/AURO2026/my_week_2/install/my_week_2/lib/my_week_2
+[1.474s] 
+[1.474s] Installed /workspaces/AURO2026/my_week_2/build/my_week_2
+[1.474s] running symlink_data
+[1.475s] creating /workspaces/AURO2026/my_week_2/install/my_week_2/share/ament_index/resource_index/packages
+[1.475s] symbolically linking /workspaces/AURO2026/my_week_2/build/my_week_2/resource/my_week_2 -> /workspaces/AURO2026/my_week_2/install/my_week_2/share/ament_index/resource_index/packages
+[1.475s] symbolically linking /workspaces/AURO2026/my_week_2/build/my_week_2/package.xml -> /workspaces/AURO2026/my_week_2/install/my_week_2/share/my_week_2
+[1.496s] Invoked command in '/workspaces/AURO2026/my_week_2/build/my_week_2' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/workspaces/AURO2026/my_week_2/build/my_week_2/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/workspaces/AURO2026/my_week_2/install/my_week_2/lib/python3.14/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /workspaces/AURO2026/my_week_2/build/my_week_2/build --no-deps symlink_data

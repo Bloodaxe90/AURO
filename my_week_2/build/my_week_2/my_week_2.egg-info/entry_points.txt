@@ -1,0 +1,4 @@
+[console_scripts]
+positioner = my_package.positioner:main
+publisher = my_package.publisher:main
+subscriber = my_package.subscriber:main
