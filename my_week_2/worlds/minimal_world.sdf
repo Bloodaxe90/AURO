@@ -21,7 +21,7 @@
    
     <include>
       <uri>model://models/simple_box</uri>
-      <pose>0 0 0.5 0 0 0</pose>
+      <pose>0 0 10 0 0 0</pose>
       <name>crate_0</name>
     </include>
   </world>
