@@ -25,7 +25,9 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'planar_fk_euler = planar_fk_euler.planar_fk_euler:main'
+            'planar_fk_euler = planar_fk_euler.planar_fk_euler:main',
+            'joint2 = planar_fk_euler.joint2:main',
+            'pose_plotter = planar_fk_euler.pose_plotter:main'
         ],
     },
 )
