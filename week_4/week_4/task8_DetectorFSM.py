@@ -106,8 +106,9 @@ class DetectorFSMNode(Node):
         # in RoboChart.
         self.platform.scan.set(Seq(msg.ranges))
 
-        # Step the machine in response to the event, without stepping its clocks. Unless
-        # consumed in this step, the event is then cleared.
+        # Step the machine in response to the event, without stepping its clocks. If not
+        # consumed in this step, the event remains available till consumed, or replaced by a
+        # newer one.
         self.stm.execute(timed=False)
 
     def control_loop(self):

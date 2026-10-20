@@ -140,19 +140,19 @@ class Input(Generic[T]):
     '''
     An input event: 'obstacle: Input[Direction]'. It is set by the environment, for example
     from a ROS callback, and consumed by the state machine. What happens to an event that is
-    not consumed is given by 'keep', for example 'obstacle: Input[Direction] = Input(keep = 'latest')':
+    not consumed is given by 'keep', for example 'obstacle: Input[Direction] = Input(keep = 'cycle')':
 
-      - 'cycle' (default): it is cleared at the end of the cycle (call to 'execute') in which
-        it was available; suitable for continuous streams, like odometry;
-      - 'latest': it is kept till consumed, and a new value replaces it; suitable for sensors
-        where only the latest reading matters;
+      - 'latest' (default): it is kept till consumed, and a new value replaces it; suitable
+        for sensors where only the latest reading matters;
+      - 'cycle': it is cleared at the end of the cycle (call to 'execute') in which it was
+        available, so it is only accepted if the machine is ready for it then;
       - 'queue': all values are kept, in order, till consumed; suitable for commands that
         must not be lost.
     '''
 
     KEEP = ('cycle', 'latest', 'queue')
 
-    def __init__(self, keep = 'cycle'):
+    def __init__(self, keep = 'latest'):
         if keep not in Input.KEEP:
             raise ValueError(f"keep must be one of {', '.join(map(repr, Input.KEEP))}, but got {keep!r}.")
         self.keep = keep
