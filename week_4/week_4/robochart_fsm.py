@@ -531,22 +531,27 @@ class State(metaclass = _StateMeta):
     to the other states. Actions of transitions are functions, typically defined in 'transitions'
     next to the transition, and returned without calling them, as in 'return self.Driving, action'.
 
-    A junction is also a function defined in 'transitions', which returns the result of one of
-    its transitions, as 'transitions' does. It is evaluated after the action of the transition
-    leading to it, so its guards see the effect of that action:
+    A junction is also a function defined in 'transitions', marked with @junction, which returns
+    the result of one of its transitions, as 'transitions' does. It is evaluated after the action
+    of the transition leading to it, so its guards see the effect of that action:
 
         def transitions(self):
             if self.obstacle.triggered():
                 self.obs = self.obstacle.take()             # trigger obstacle?obs
 
-                def junction():
+                @junction
+                def j0():
                     if self.obs == Direction.LEFT:          # guard
                         def action():
                             yield from self.move(0.0, avel)
                         return self.Rotating, action
                     ...
 
-                return junction, self.C.reset               # action #C, to the junction
+                return j0, self.C.reset                     # action #C, to the junction
+
+    If no transition out of a junction is enabled (it returns None), the machine waits at the
+    junction, and the junction is evaluated again on every cycle. As the machine is in the
+    middle of a transition, it is busy while it waits: enclosing states cannot interrupt it.
     '''
 
     def __init_subclass__(cls, **kwargs):
@@ -677,13 +682,24 @@ class State(metaclass = _StateMeta):
         return result
 
 
+def junction(function):
+    '''
+    Decorator that marks a function as a junction: it returns the result of one of its
+    transitions, as 'transitions' does, or None if none is enabled. Marking junctions makes
+    mistakes, like returning an action without its target, errors rather than junctions.
+    '''
+    function._robochart_junction = True
+    return function
+
+
 def _is_junction(target):
-    ''' A junction is a function that returns the result of one of its transitions, like 'transitions'. '''
-    return callable(target) and not isinstance(target, (_StateRef, _OperationRef, type))
+    return callable(target) and getattr(target, '_robochart_junction', False)
 
 
 def _describe(target):
-    return getattr(target, '__name__', None) if _is_junction(target) else repr(target)
+    if isinstance(target, _StateRef) or target is FINAL:
+        return repr(target)
+    return getattr(target, '__name__', repr(target))
 
 
 def _is_generator(value):
@@ -711,6 +727,20 @@ def _advance(during):
         return during
     except StopIteration:
         return None
+
+
+def _at_junction(junction):
+    '''
+    Wait at a junction till one of its transitions is enabled: the junction is evaluated again
+    on every cycle. If none can ever be enabled, the machine is deadlocked here. Unlike in a
+    state, the machine is in the middle of a transition, so it is busy: enclosing states
+    cannot interrupt it.
+    '''
+    while True:
+        yield MachineStatus.BUSY
+        result = junction()
+        if result is not None:
+            return result
 
 
 def _then(effect, target):
@@ -741,6 +771,13 @@ class _Region:
         '''
         if isinstance(result, tuple) and len(result) == 2:
             target, action = result
+            if callable(target) and (action is FINAL or isinstance(action, _StateRef) or _is_junction(action)):
+                raise TypeError(f"In {self._name}: a transition was given as ({_describe(target)}, "
+                                f"{_describe(action)}): did you mean ({_describe(action)}, {_describe(target)}), "
+                                f"with the target first, then the action?")
+            if not callable(action):
+                raise TypeError(f"In {self._name}: the action of a transition must be a function, "
+                                f"called after the source state is exited, but got {action!r}.")
         else:
             target, action = result, None
         self._check_target(target)
@@ -752,15 +789,23 @@ class _Region:
         if _is_junction(target):
             result = target()
             if result is None:
-                # In RoboChart, the machine would be blocked at the junction.
-                raise RuntimeError(f"In {self._name}: no transition out of junction '{_describe(target)}' is enabled.")
+                # No transition out of the junction is enabled: wait there.
+                self.source = source
+                self.transition = f"{source} -> {_describe(target)}"
+                return _at_junction(target)
             return self._next(result, source)
         return target
 
     def _check_target(self, target):
-        if target is not FINAL and not isinstance(target, _StateRef) and not _is_junction(target):
-            raise TypeError(f"In {self._name}: a transition must lead to a state (as in 'self.Forward'), FINAL, "
-                            f"or a junction, possibly with an action, as in '(self.Forward, action)', but got {target!r}.")
+        if target is FINAL or isinstance(target, _StateRef) or _is_junction(target):
+            return
+        hint = ""
+        if callable(target):
+            hint = (f" If '{_describe(target)}' is the action of the transition, return it with the target, "
+                    f"as in '(self.Forward, {_describe(target)})'; if it is a junction, mark it with @junction.")
+        raise TypeError(f"In {self._name}: a transition must lead to a state (as in 'self.Forward'), FINAL, "
+                        f"or a junction, possibly with an action, as in '(self.Forward, action)', but got "
+                        f"{target!r}.{hint}")
 
     def step(self):
         ''' Execute one cycle. '''
