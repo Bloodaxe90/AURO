@@ -4,19 +4,14 @@
   <name>week_4</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-<<<<<<< HEAD
   <maintainer email="kkf525@york.ac.uk">kkf525</maintainer>
   <license>Apache-2.0</license>
-=======
-  <maintainer email="pedro.ribeiro@york.ac.uk">Pedro Ribeiro</maintainer>
-  <license>TODO: License declaration</license>
 
   <depend>rclpy</depend>
   <depend>ros_gz_sim</depend>
   <depend>sensor_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>std_msgs</depend>
->>>>>>> real
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
