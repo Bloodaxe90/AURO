@@ -26,8 +26,11 @@ setup(
     entry_points={
         'console_scripts': [
             'week_4 = week_4.week_4:main',
-            'week_4_state_machine = week_4.week_4_state_machine:main'
-
+            'week_4_state_machine = week_4.week_4_state_machine:main',
+            'task3 = week_4.task3:main',
+            'task7 = week_4.task7:main',
+            'task8_TurtleBot3FSMRC = week_4.task8_TurtleBot3FSMRC:main'
+        
         ],
     },
 )
