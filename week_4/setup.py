@@ -26,6 +26,8 @@ setup(
     entry_points={
         'console_scripts': [
             'week_4 = week_4.week_4:main'
+            'task_3 = week_4.task_3:main'
+
         ],
     },
 )
