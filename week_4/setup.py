@@ -25,7 +25,9 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'week_4 = week_4.week_4:main'
+            'week_4 = week_4.week_4:main',
+            'week_4_state_machine = week_4.week_4_state_machine:main'
+
         ],
     },
 )
