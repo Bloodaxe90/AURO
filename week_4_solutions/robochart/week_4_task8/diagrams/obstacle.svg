@@ -1,13 +1,13 @@
 
 <svg stroke-dasharray="none" shape-rendering="auto"
      xmlns="http://www.w3.org/2000/svg" font-family="Helvetica"
-     text-rendering="auto" width="865" fill-opacity="1"
+     text-rendering="auto" width="910" fill-opacity="1"
      contentScriptType="text/ecmascript"
      xmlns:diagram="http://www.eclipse.org/sirius/diagram/1.1.0"
      color-interpolation="auto" color-rendering="auto"
      preserveAspectRatio="xMidYMid meet" font-size="12"
      diagram:semanticRoot="platform:/resource/week_4_task8/obstacle.rct#/"
-     viewBox="0 0 865 739" fill="black"
+     viewBox="0 0 910 739" fill="black"
      xmlns:xlink="http://www.w3.org/1999/xlink" stroke="black"
      image-rendering="auto" stroke-miterlimit="10" zoomAndPan="magnify"
      version="1.0" stroke-linejoin="miter" stroke-linecap="square"
@@ -26,7 +26,7 @@
                 <stop stop-opacity="1" stop-color="white" offset="100%"/>
             </linearGradient>
             <linearGradient x1="32" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            gradientUnits="userSpaceOnUse" y1="125" x2="833"
+                            gradientUnits="userSpaceOnUse" y1="125" x2="878"
                             y2="125" xlink:type="simple" xlink:actuate="onLoad"
                             id="linearGradient2" xlink:show="other"
                             spreadMethod="pad">
@@ -34,7 +34,7 @@
                 <stop stop-opacity="1" stop-color="white" offset="100%"/>
             </linearGradient>
             <linearGradient x1="33" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            gradientUnits="userSpaceOnUse" y1="152" x2="832"
+                            gradientUnits="userSpaceOnUse" y1="152" x2="877"
                             y2="152" xlink:type="simple" xlink:actuate="onLoad"
                             id="linearGradient3" xlink:show="other"
                             spreadMethod="pad">
@@ -42,7 +42,7 @@
                 <stop stop-opacity="1" stop-color="white" offset="100%"/>
             </linearGradient>
             <linearGradient x1="33" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            gradientUnits="userSpaceOnUse" y1="192" x2="832"
+                            gradientUnits="userSpaceOnUse" y1="192" x2="877"
                             y2="192" xlink:type="simple" xlink:actuate="onLoad"
                             id="linearGradient4" xlink:show="other"
                             spreadMethod="pad">
@@ -50,7 +50,7 @@
                 <stop stop-opacity="1" stop-color="white" offset="100%"/>
             </linearGradient>
             <linearGradient x1="67" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            gradientUnits="userSpaceOnUse" y1="265" x2="803"
+                            gradientUnits="userSpaceOnUse" y1="265" x2="848"
                             y2="265" xlink:type="simple" xlink:actuate="onLoad"
                             id="linearGradient5" xlink:show="other"
                             spreadMethod="pad">
@@ -58,7 +58,7 @@
                 <stop stop-opacity="1" stop-color="white" offset="100%"/>
             </linearGradient>
             <linearGradient x1="68" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            gradientUnits="userSpaceOnUse" y1="292" x2="802"
+                            gradientUnits="userSpaceOnUse" y1="292" x2="847"
                             y2="292" xlink:type="simple" xlink:actuate="onLoad"
                             id="linearGradient6" xlink:show="other"
                             spreadMethod="pad">
@@ -66,7 +66,7 @@
                 <stop stop-opacity="1" stop-color="white" offset="100%"/>
             </linearGradient>
             <linearGradient x1="68" xmlns:xlink="http://www.w3.org/1999/xlink"
-                            gradientUnits="userSpaceOnUse" y1="376" x2="802"
+                            gradientUnits="userSpaceOnUse" y1="376" x2="847"
                             y2="376" xlink:type="simple" xlink:actuate="onLoad"
                             id="linearGradient7" xlink:show="other"
                             spreadMethod="pad">
@@ -119,19 +119,19 @@
                 <path d="M32 34 L230 34 L230 108 L32 108 L32 34 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath8">
-                <path d="M31 124 L836 124 L836 730 L31 730 L31 124 Z"/>
+                <path d="M31 124 L881 124 L881 730 L31 730 L31 124 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath9">
-                <path d="M31 124 L834 124 L834 728 L31 728 L31 124 Z"/>
+                <path d="M31 124 L879 124 L879 728 L31 728 L31 124 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath10">
-                <path d="M369 129 L496 129 L496 147 L369 147 L369 129 Z"/>
+                <path d="M391 129 L518 129 L518 147 L391 147 L391 129 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath11">
-                <path d="M369 129 L499 129 L499 147 L369 147 L369 129 Z"/>
+                <path d="M391 129 L521 129 L521 147 L391 147 L391 129 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath12">
-                <path d="M32 151 L833 151 L833 193 L32 193 L32 151 Z"/>
+                <path d="M32 151 L878 151 L878 193 L32 193 L32 151 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath13">
                 <path d="M36 152 L101 152 L101 170 L36 170 L36 152 Z"/>
@@ -146,22 +146,22 @@
                 <path d="M36 168 L117 168 L117 186 L36 186 L36 168 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath17">
-                <path d="M32 191 L833 191 L833 727 L32 727 L32 191 Z"/>
+                <path d="M32 191 L878 191 L878 727 L32 727 L32 191 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath18">
-                <path d="M66 264 L806 264 L806 710 L66 710 L66 264 Z"/>
+                <path d="M66 264 L851 264 L851 710 L66 710 L66 264 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath19">
-                <path d="M66 264 L804 264 L804 708 L66 708 L66 264 Z"/>
+                <path d="M66 264 L849 264 L849 708 L66 708 L66 264 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath20">
-                <path d="M385 269 L485 269 L485 287 L385 287 L385 269 Z"/>
+                <path d="M407 269 L507 269 L507 287 L407 287 L407 269 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath21">
-                <path d="M385 269 L488 269 L488 287 L385 287 L385 269 Z"/>
+                <path d="M407 269 L510 269 L510 287 L407 287 L407 269 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath22">
-                <path d="M67 291 L803 291 L803 377 L67 377 L67 291 Z"/>
+                <path d="M67 291 L848 291 L848 377 L67 377 L67 291 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath23">
                 <path d="M71 292 L178 292 L178 310 L71 310 L71 292 Z"/>
@@ -188,7 +188,7 @@
                 <path d="M71 340 L152 340 L152 358 L71 358 L71 340 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath31">
-                <path d="M67 375 L803 375 L803 707 L67 707 L67 375 Z"/>
+                <path d="M67 375 L848 375 L848 707 L67 707 L67 375 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath32">
                 <path d="M86 427 L112 427 L112 453 L86 453 L86 427 Z"/>
@@ -212,10 +212,10 @@
                 <path d="M132 422 L174 422 L174 505 L132 505 L132 422 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath39">
-                <path d="M766 474 L792 474 L792 500 L766 500 L766 474 Z"/>
+                <path d="M801 474 L827 474 L827 500 L801 500 L801 474 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath40">
-                <path d="M67 290 L803 290 L803 707 L67 707 L67 290 Z"/>
+                <path d="M67 290 L848 290 L848 707 L67 707 L67 290 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath41">
                 <path d="M87 242 L119 242 L119 274 L87 274 L87 242 Z"/>
@@ -230,7 +230,7 @@
                 <path d="M598 250 L714 250 L714 267 L598 267 L598 250 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath45">
-                <path d="M32 150 L833 150 L833 727 L32 727 L32 150 Z"/>
+                <path d="M32 150 L878 150 L878 727 L32 727 L32 150 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath46">
                 <path d="M9 204 L41 204 L41 236 L9 236 L9 204 Z"/>
@@ -239,43 +239,49 @@
                 <path d="M40 204 L130 204 L130 221 L40 221 L40 204 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath48">
-                <path d="M824 214 L856 214 L856 246 L824 246 L824 214 Z"/>
+                <path d="M869 214 L901 214 L901 246 L869 246 L869 214 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath49">
-                <path d="M711 219 L827 219 L827 236 L711 236 L711 219 Z"/>
+                <path d="M756 219 L872 219 L872 236 L756 236 L756 219 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath50">
-                <path d="M-1 -1 L866 -1 L866 740 L-1 740 L-1 -1 Z"/>
+                <path d="M-1 -1 L911 -1 L911 740 L-1 740 L-1 -1 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath51">
-                <path d="M191 654 L679 654 L679 671 L191 671 L191 654 Z"/>
-            </clipPath>
-            <clipPath clipPathUnits="userSpaceOnUse" id="clipPath52">
-                <path d="M152 503 L163 503 L163 515 L152 515 L152 503 Z"/>
-            </clipPath>
-            <clipPath clipPathUnits="userSpaceOnUse" id="clipPath53">
                 <path d="M97 234 L108 234 L108 246 L97 246 L97 234 Z"/>
             </clipPath>
+            <clipPath clipPathUnits="userSpaceOnUse" id="clipPath52">
+                <path d="M191 564 L679 564 L679 581 L191 581 L191 564 Z"/>
+            </clipPath>
+            <clipPath clipPathUnits="userSpaceOnUse" id="clipPath53">
+                <path d="M152 503 L163 503 L163 515 L152 515 L152 503 Z"/>
+            </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath54">
-                <path d="M195 389 L286 389 L286 412 L195 412 L195 389 Z"/>
+                <path d="M186 514 L650 514 L650 531 L186 531 L186 514 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath55">
-                <path d="M774 466 L785 466 L785 478 L774 478 L774 466 Z"/>
+                <path d="M161 589 L807 589 L807 631 L161 631 L161 589 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath56">
-                <path d="M123 433 L135 433 L135 444 L123 444 L123 433 Z"/>
+                <path d="M149 503 L160 503 L160 515 L149 515 L149 503 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath57">
-                <path d="M186 469 L760 469 L760 486 L186 486 L186 469 Z"/>
+                <path d="M195 389 L286 389 L286 412 L195 412 L195 389 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath58">
-                <path d="M172 487 L184 487 L184 498 L172 498 L172 487 Z"/>
+                <path d="M809 466 L820 466 L820 478 L809 478 L809 466 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath59">
-                <path d="M816 230 L828 230 L828 241 L816 241 L816 230 Z"/>
+                <path d="M861 230 L873 230 L873 241 L861 241 L861 230 Z"/>
             </clipPath>
             <clipPath clipPathUnits="userSpaceOnUse" id="clipPath60">
-                <path d="M186 564 L650 564 L650 581 L186 581 L186 564 Z"/>
+                <path d="M186 469 L760 469 L760 486 L186 486 L186 469 Z"/>
+            </clipPath>
+            <clipPath clipPathUnits="userSpaceOnUse" id="clipPath61">
+                <path d="M172 487 L184 487 L184 498 L172 498 L172 487 Z"/>
+            </clipPath>
+            <clipPath clipPathUnits="userSpaceOnUse" id="clipPath62">
+                <path d="M123 433 L135 433 L135 444 L123 444 L123 433 Z"/>
             </clipPath>
         </defs>
         <g font-size="13" fill="rgb(131,122,133)"
@@ -305,20 +311,20 @@
             <line clip-path="url(#clipPath7)" fill="none" x1="33" x2="229"
                   y1="35" y2="35"/>
             <rect x="33" y="126" clip-path="url(#clipPath8)"
-                  fill="rgb(131,122,133)" width="801" rx="0" height="602" ry="0"
+                  fill="rgb(131,122,133)" width="846" rx="0" height="602" ry="0"
                   opacity="0.2549" stroke="none"/>
             <rect x="34" y="127" clip-path="url(#clipPath8)"
-                  fill="rgb(131,122,133)" width="801" rx="0" height="602" ry="0"
+                  fill="rgb(131,122,133)" width="846" rx="0" height="602" ry="0"
                   opacity="0.2549" stroke="none"/>
             <rect x="32" y="125" clip-path="url(#clipPath9)"
-                  fill="url(#linearGradient2)" width="801" rx="0" height="602"
+                  fill="url(#linearGradient2)" width="846" rx="0" height="602"
                   ry="0" stroke="none"/>
             <rect x="32" y="125" clip-path="url(#clipPath9)" fill="none"
-                  width="800" rx="0" height="601" ry="0"/>
+                  width="845" rx="0" height="601" ry="0"/>
             <image xmlns:xlink="http://www.w3.org/1999/xlink" width="16"
                    xlink:show="embed" xlink:type="simple"
                    clip-path="url(#clipPath10)" preserveAspectRatio="none"
-                   font-weight="normal" height="16" x="370" y="130"
+                   font-weight="normal" height="16" x="392" y="130"
                    xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABk0lEQVR42p2TzytE
 URTHz71vkmykLKzUzMoCK/+AnQ1JjYaVlZSmWTGYhR9NklLUFJqslA07K6XYIYtZ
 KM1mmGyMIjakzNzr87xXI8Qbb+a9e85593vO93zPfY7UdrWI6BUlelzEXuKXnFrA
@@ -329,7 +335,7 @@ ggQT6INe/aeYa5eDzgYRlftbI9cDdhRGo1Q/5V2e++6Hmm3se6X/ousp73Z6EXEW
 s4SIUx5YJ6DXaMQs4T/74E02x76I+OsVYYzTRtQ+c29mdBnEjrlnwB/jbsCT6AzD
 ELBkqZr0gx0kOQwFS1DZYTrdHOVWU00aRqvHGj4me45G67TUThtdUF9kTal/fM7z
 TK0VsWfwc+/nVnlyOk1l/wAAAABJRU5ErkJggg==" xlink:actuate="onLoad"/>
-            <text x="389" y="143" clip-path="url(#clipPath11)" stroke="none"
+            <text x="411" y="143" clip-path="url(#clipPath11)" stroke="none"
                   font-weight="normal" xml:space="preserve">ObstacleDetector</text>
         </g>
         <g font-size="1" stroke-linecap="butt" fill="url(#linearGradient3)"
@@ -429,20 +435,20 @@ TK0VsWfwc+/nVnlyOk1l/wAAAABJRU5ErkJggg==" xlink:actuate="onLoad"/>
             <text x="56" font-size="13" y="182" clip-path="url(#clipPath16)"
                   fill="black" stroke="none" xml:space="preserve">IObstacle</text>
 
-            <line clip-path="url(#clipPath17)" fill="none" x1="33" x2="832"
+            <line clip-path="url(#clipPath17)" fill="none" x1="33" x2="877"
                   y1="192" y2="192" stroke="black"/>
             <rect x="68" y="266" clip-path="url(#clipPath18)"
-                  fill="rgb(131,122,133)" width="736" rx="0" height="442" ry="0"
+                  fill="rgb(131,122,133)" width="781" rx="0" height="442" ry="0"
                   opacity="0.2549" stroke="none"/>
             <rect x="69" y="267" clip-path="url(#clipPath18)"
-                  fill="rgb(131,122,133)" width="736" rx="0" height="442" ry="0"
+                  fill="rgb(131,122,133)" width="781" rx="0" height="442" ry="0"
                   opacity="0.2549" stroke="none"/>
             <rect x="67" y="265" clip-path="url(#clipPath19)"
-                  fill="url(#linearGradient5)" width="736" rx="0" height="442"
+                  fill="url(#linearGradient5)" width="781" rx="0" height="442"
                   ry="0" stroke="none"/>
             <rect x="67" y="265" clip-path="url(#clipPath19)" fill="none"
-                  width="735" rx="0" height="441" ry="0" stroke="black"/>
-            <svg x="386" contentScriptType="text/ecmascript" y="270" width="16"
+                  width="780" rx="0" height="441" ry="0" stroke="black"/>
+            <svg x="408" contentScriptType="text/ecmascript" y="270" width="16"
                  xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify"
                  contentStyleType="text/css" height="16"
                  preserveAspectRatio="xMidYMid meet"
@@ -459,7 +465,7 @@ TK0VsWfwc+/nVnlyOk1l/wAAAABJRU5ErkJggg==" xlink:actuate="onLoad"/>
                     </g>
                 </g>
             </svg>
-            <text x="405" font-size="13" y="283" clip-path="url(#clipPath21)"
+            <text x="427" font-size="13" y="283" clip-path="url(#clipPath21)"
                   fill="black" stroke="none" xml:space="preserve">DetectorFSM</text>
 
             <image xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -604,7 +610,7 @@ GWyT/m82aO1T8algejNCESxRKEVDOBW4S8aT0d+HKm6GpG+oE3zmfI8awO+rofru
             <text x="91" font-size="13" y="354" clip-path="url(#clipPath30)"
                   fill="black" stroke="none" xml:space="preserve">IObstacle</text>
 
-            <line clip-path="url(#clipPath31)" fill="none" x1="68" x2="802"
+            <line clip-path="url(#clipPath31)" fill="none" x1="68" x2="847"
                   y1="376" y2="376" stroke="black"/>
             <svg contentScriptType="text/ecmascript" zoomAndPan="magnify"
                  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -656,7 +662,7 @@ GWyT/m82aO1T8algejNCESxRKEVDOBW4S8aT0d+HKm6GpG+oE3zmfI8awO+rofru
                  xmlns:dc="http://purl.org/dc/elements/1.1/"
                  xmlns:cc="http://creativecommons.org/ns#"
                  preserveAspectRatio="xMidYMid meet" viewBox="0 0 16 16"
-                 height="24" xmlns="http://www.w3.org/2000/svg" x="767" y="475">
+                 height="24" xmlns="http://www.w3.org/2000/svg" x="802" y="475">
                 <metadata id="metadata8replaced7">
                     <rdf:RDF>
                         <cc:Work rdf:about="">
@@ -669,7 +675,7 @@ GWyT/m82aO1T8algejNCESxRKEVDOBW4S8aT0d+HKm6GpG+oE3zmfI8awO+rofru
                         <path id="path14replaced7"
                               d="M 3640,1820 C 3640,814.84 2825.16,0 1820,0 814.84,0 0,814.84 0,1820 c 0,1005.16 814.84,1820 1820,1820 1005.16,0 1820,-814.84 1820,-1820 z"
                               style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"/></g></g></svg>
-            <line clip-path="url(#clipPath40)" fill="none" x1="68" x2="802"
+            <line clip-path="url(#clipPath40)" fill="none" x1="68" x2="847"
                   y1="291" y2="291" stroke="black"/>
             <image xmlns:xlink="http://www.w3.org/1999/xlink" stroke="black"
                    width="30" xlink:show="embed" xlink:type="simple"
@@ -693,7 +699,7 @@ KaaYYoop1lmud1JKKKVUW2+PNJL1/wFao35fMOlvt8mfkkHzaPsBPYYXxb/orc0AAAAASUVORK5CYII=
                    font-size="12" xlink:actuate="onLoad"/>
             <text x="599" font-size="13" y="264" clip-path="url(#clipPath44)"
                   fill="black" stroke="none" xml:space="preserve">obstacle: Direction</text>
-            <line clip-path="url(#clipPath45)" fill="none" x1="33" x2="832"
+            <line clip-path="url(#clipPath45)" fill="none" x1="33" x2="877"
                   y1="151" y2="151" stroke="black"/>
             <image xmlns:xlink="http://www.w3.org/1999/xlink" stroke="black"
                    width="30" xlink:show="embed" xlink:type="simple"
@@ -709,145 +715,177 @@ KaaYYoop1lmud1JKKKVUW2+PNJL1/wFao35fMOlvt8mfkkHzaPsBPYYXxb/orc0AAAAASUVORK5CYII=
             <image xmlns:xlink="http://www.w3.org/1999/xlink" stroke="black"
                    width="30" xlink:show="embed" xlink:type="simple"
                    fill="black" clip-path="url(#clipPath48)"
-                   preserveAspectRatio="none" height="30" x="825" y="215"
+                   preserveAspectRatio="none" height="30" x="870" y="215"
                    xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAkklEQVR42u2Xuw3D
 MAxEz7/AVkaQAC2hIpnNI3ifTKBR1KpP4kJhYRh2etHNPeAIsHoSK7IBMG+ZoMNH
 snRSXpI79Oglj1bKCH1u/bGLMcJaW8WUc0YI4fTtHeccvPdVxMaYU9/iIiimmGKK
 KaaYYoop1lmud1JKKKVUW2+PNJL1/wFao35fMOlvt8mfkkHzaPsBPYYXxb/orc0AAAAASUVORK5CYII="
                    font-size="12" xlink:actuate="onLoad"/>
-            <text x="712" font-size="13" y="233" clip-path="url(#clipPath49)"
+            <text x="757" font-size="13" y="233" clip-path="url(#clipPath49)"
                   fill="black" stroke="none" xml:space="preserve">obstacle: Direction</text>
         </g>
         <g font-size="13" stroke-linecap="butt" fill="rgb(136,136,136)"
-           font-family="&apos;Ubuntu&apos;" stroke="rgb(136,136,136)"
-           stroke-width="2.1">
-            <line clip-path="url(#clipPath50)" fill="none" x1="779" x2="779"
-                  y1="498" y2="675"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="779" x2="157"
-                  y1="675" y2="675"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="157" x2="157"
-                  y1="675" y2="505"/>
-            <text x="192" y="668" clip-path="url(#clipPath51)" fill="black"
-                  stroke="none" xml:space="preserve">[min(ran(extract([271,330], data)))&lt;SCAN_THRESHOLD]/obstacle!Direction::right</text>
-            <line clip-path="url(#clipPath52)" fill="none" x1="160" x2="157"
-                  y1="512" y2="505"/>
-            <line clip-path="url(#clipPath52)" fill="none" x1="157" x2="154"
-                  y1="505" y2="512"/>
+           font-family="&apos;Ubuntu&apos;" font-style="italic"
+           stroke="rgb(136,136,136)" stroke-width="2.1">
             <line clip-path="url(#clipPath50)" fill="none" x1="39" x2="102"
                   y1="225" y2="225"/>
             <line clip-path="url(#clipPath50)" fill="none" x1="102" x2="102"
                   y1="225" y2="243"/>
-            <line clip-path="url(#clipPath53)" fill="none" x1="99" x2="102"
+            <line clip-path="url(#clipPath51)" fill="none" x1="99" x2="102"
                   y1="236" y2="243"/>
-            <line clip-path="url(#clipPath53)" fill="none" x1="102" x2="105"
+            <line clip-path="url(#clipPath51)" fill="none" x1="102" x2="105"
                   y1="243" y2="236"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="174" x2="779"
-                  y1="418" y2="418"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="779" x2="779"
-                  y1="418" y2="475"/>
-            <text x="210" y="406" clip-path="url(#clipPath54)" fill="black"
-                  stroke="none" xml:space="preserve">scan?data</text>
-            <line clip-path="url(#clipPath55)" fill="none" x1="776" x2="779"
-                  y1="468" y2="475"/>
-            <line clip-path="url(#clipPath55)" fill="none" x1="779" x2="782"
-                  y1="475" y2="468"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="110" x2="132"
-                  y1="438" y2="438"/>
-            <line clip-path="url(#clipPath56)" fill="none" x1="125" x2="132"
-                  y1="441" y2="438"/>
-            <line clip-path="url(#clipPath56)" fill="none" x1="132" x2="125"
-                  y1="438" y2="435"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="768" x2="174"
-                  y1="492" y2="492"/>
-            <text x="187" y="483" clip-path="url(#clipPath57)" fill="black"
-                  stroke="none" xml:space="preserve">[min(ran(extract(union([331,359], [0,30]), data)))&lt;SCAN_THRESHOLD]/obstacle!Direction::front</text>
-            <line clip-path="url(#clipPath58)" fill="none" x1="181" x2="174"
-                  y1="489" y2="492"/>
-            <line clip-path="url(#clipPath58)" fill="none" x1="174" x2="181"
-                  y1="492" y2="495"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="727" x2="727"
-                  y1="243" y2="235"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="727" x2="825"
-                  y1="235" y2="235"/>
-            <line clip-path="url(#clipPath59)" fill="none" x1="818" x2="825"
-                  y1="238" y2="235"/>
-            <line clip-path="url(#clipPath59)" fill="none" x1="825" x2="818"
-                  y1="235" y2="232"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="779" x2="779"
+            <line clip-path="url(#clipPath50)" fill="none" x1="814" x2="814"
                   y1="498" y2="585"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="779" x2="157"
+            <line clip-path="url(#clipPath50)" fill="none" x1="814" x2="157"
                   y1="585" y2="585"/>
             <line clip-path="url(#clipPath50)" fill="none" x1="157" x2="157"
                   y1="585" y2="505"/>
-            <text x="187" y="578" clip-path="url(#clipPath60)" fill="black"
-                  stroke="none" xml:space="preserve">[min(ran(extract([31,90], data)))&lt;SCAN_THRESHOLD]/obstacle!Direction::left</text>
-            <line clip-path="url(#clipPath52)" fill="none" x1="160" x2="157"
+            <text x="192" y="578" clip-path="url(#clipPath52)" fill="black"
+                  font-style="normal" stroke="none" xml:space="preserve">[min(ran(extract([271,330], data)))&lt;SCAN_THRESHOLD]/obstacle!Direction::right</text>
+            <line clip-path="url(#clipPath53)" fill="none" x1="160" x2="157"
                   y1="512" y2="505"/>
-            <line clip-path="url(#clipPath52)" fill="none" x1="157" x2="154"
+            <line clip-path="url(#clipPath53)" fill="none" x1="157" x2="154"
                   y1="505" y2="512"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="814" x2="814"
+                  y1="498" y2="535"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="814" x2="157"
+                  y1="535" y2="535"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="157" x2="157"
+                  y1="535" y2="505"/>
+            <text x="187" y="528" clip-path="url(#clipPath54)" fill="black"
+                  font-style="normal" stroke="none" xml:space="preserve">[min(ran(extract([31,90], data)))&lt;SCAN_THRESHOLD]/obstacle!Direction::left</text>
+            <line clip-path="url(#clipPath53)" fill="none" x1="160" x2="157"
+                  y1="512" y2="505"/>
+            <line clip-path="url(#clipPath53)" fill="none" x1="157" x2="154"
+                  y1="505" y2="512"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="814" x2="814"
+                  y1="498" y2="630"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="814" x2="154"
+                  y1="630" y2="630"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="154" x2="154"
+                  y1="630" y2="505"/>
+            <text x="164" y="608" clip-path="url(#clipPath55)" fill="black"
+                  font-style="normal" stroke="none" xml:space="preserve">[not (min(ran(extract(union([331,359], [0,30]), data)))&lt;SCAN_THRESHOLD\/min(ran(extract([31,90], data)))</text>
+            <text x="247" y="623" clip-path="url(#clipPath55)" fill="black"
+                  font-style="normal" stroke="none" xml:space="preserve">&lt;SCAN_THRESHOLD\/min(ran(extract([271,330], data)))&lt;SCAN_THRESHOLD)]</text>
+            <line clip-path="url(#clipPath56)" fill="none" x1="157" x2="154"
+                  y1="512" y2="505"/>
+            <line clip-path="url(#clipPath56)" fill="none" x1="154" x2="151"
+                  y1="505" y2="512"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="174" x2="814"
+                  y1="418" y2="418"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="814" x2="814"
+                  y1="418" y2="475"/>
+            <text x="210" y="406" clip-path="url(#clipPath57)" fill="black"
+                  font-style="normal" stroke="none" xml:space="preserve">scan?data</text>
+            <line clip-path="url(#clipPath58)" fill="none" x1="811" x2="814"
+                  y1="468" y2="475"/>
+            <line clip-path="url(#clipPath58)" fill="none" x1="814" x2="817"
+                  y1="475" y2="468"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="741" x2="749"
+                  y1="255" y2="255"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="749" x2="749"
+                  y1="255" y2="235"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="749" x2="870"
+                  y1="235" y2="235"/>
+            <line clip-path="url(#clipPath59)" fill="none" x1="863" x2="870"
+                  y1="238" y2="235"/>
+            <line clip-path="url(#clipPath59)" fill="none" x1="870" x2="863"
+                  y1="235" y2="232"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="803" x2="174"
+                  y1="492" y2="492"/>
+            <text x="187" y="483" clip-path="url(#clipPath60)" fill="black"
+                  font-style="normal" stroke="none" xml:space="preserve">[min(ran(extract(union([331,359], [0,30]), data)))&lt;SCAN_THRESHOLD]/obstacle!Direction::front</text>
+            <line clip-path="url(#clipPath61)" fill="none" x1="181" x2="174"
+                  y1="489" y2="492"/>
+            <line clip-path="url(#clipPath61)" fill="none" x1="174" x2="181"
+                  y1="492" y2="495"/>
             <line clip-path="url(#clipPath50)" fill="none" x1="110" x2="132"
                   y1="438" y2="438"/>
-            <line clip-path="url(#clipPath56)" fill="none" x1="125" x2="132"
+            <line clip-path="url(#clipPath62)" fill="none" x1="125" x2="132"
                   y1="441" y2="438"/>
-            <line clip-path="url(#clipPath56)" fill="none" x1="132" x2="125"
+            <line clip-path="url(#clipPath62)" fill="none" x1="132" x2="125"
+                  y1="438" y2="435"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="110" x2="132"
+                  y1="438" y2="438"/>
+            <line clip-path="url(#clipPath62)" fill="none" x1="125" x2="132"
+                  y1="441" y2="438"/>
+            <line clip-path="url(#clipPath62)" fill="none" x1="132" x2="125"
                   y1="438" y2="435"/>
             <line clip-path="url(#clipPath50)" fill="none" x1="39" x2="102"
                   y1="225" y2="225"/>
             <line clip-path="url(#clipPath50)" fill="none" x1="102" x2="102"
                   y1="225" y2="243"/>
-            <line clip-path="url(#clipPath53)" fill="none" x1="99" x2="102"
+            <line clip-path="url(#clipPath51)" fill="none" x1="99" x2="102"
                   y1="236" y2="243"/>
-            <line clip-path="url(#clipPath53)" fill="none" x1="102" x2="105"
+            <line clip-path="url(#clipPath51)" fill="none" x1="102" x2="105"
                   y1="243" y2="236"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="174" x2="779"
+            <line clip-path="url(#clipPath50)" fill="none" x1="174" x2="814"
                   y1="418" y2="418"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="779" x2="779"
+            <line clip-path="url(#clipPath50)" fill="none" x1="814" x2="814"
                   y1="418" y2="475"/>
-            <text x="210" y="406" clip-path="url(#clipPath54)" fill="black"
-                  stroke="none" xml:space="preserve">scan?data</text>
-            <line clip-path="url(#clipPath55)" fill="none" x1="776" x2="779"
+            <text x="210" y="406" clip-path="url(#clipPath57)" fill="black"
+                  font-style="normal" stroke="none" xml:space="preserve">scan?data</text>
+            <line clip-path="url(#clipPath58)" fill="none" x1="811" x2="814"
                   y1="468" y2="475"/>
-            <line clip-path="url(#clipPath55)" fill="none" x1="779" x2="782"
+            <line clip-path="url(#clipPath58)" fill="none" x1="814" x2="817"
                   y1="475" y2="468"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="768" x2="174"
+            <line clip-path="url(#clipPath50)" fill="none" x1="803" x2="174"
                   y1="492" y2="492"/>
-            <text x="187" y="483" clip-path="url(#clipPath57)" fill="black"
-                  stroke="none" xml:space="preserve">[min(ran(extract(union([331,359], [0,30]), data)))&lt;SCAN_THRESHOLD]/obstacle!Direction::front</text>
-            <line clip-path="url(#clipPath58)" fill="none" x1="181" x2="174"
+            <text x="187" y="483" clip-path="url(#clipPath60)" fill="black"
+                  font-style="normal" stroke="none" xml:space="preserve">[min(ran(extract(union([331,359], [0,30]), data)))&lt;SCAN_THRESHOLD]/obstacle!Direction::front</text>
+            <line clip-path="url(#clipPath61)" fill="none" x1="181" x2="174"
                   y1="489" y2="492"/>
-            <line clip-path="url(#clipPath58)" fill="none" x1="174" x2="181"
+            <line clip-path="url(#clipPath61)" fill="none" x1="174" x2="181"
                   y1="492" y2="495"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="727" x2="727"
-                  y1="243" y2="235"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="727" x2="825"
+            <line clip-path="url(#clipPath50)" fill="none" x1="741" x2="749"
+                  y1="255" y2="255"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="749" x2="749"
+                  y1="255" y2="235"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="749" x2="870"
                   y1="235" y2="235"/>
-            <line clip-path="url(#clipPath59)" fill="none" x1="818" x2="825"
+            <line clip-path="url(#clipPath59)" fill="none" x1="863" x2="870"
                   y1="238" y2="235"/>
-            <line clip-path="url(#clipPath59)" fill="none" x1="825" x2="818"
+            <line clip-path="url(#clipPath59)" fill="none" x1="870" x2="863"
                   y1="235" y2="232"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="779" x2="779"
+            <line clip-path="url(#clipPath50)" fill="none" x1="814" x2="814"
+                  y1="498" y2="535"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="814" x2="157"
+                  y1="535" y2="535"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="157" x2="157"
+                  y1="535" y2="505"/>
+            <text x="187" y="528" clip-path="url(#clipPath54)" fill="black"
+                  font-style="normal" stroke="none" xml:space="preserve">[min(ran(extract([31,90], data)))&lt;SCAN_THRESHOLD]/obstacle!Direction::left</text>
+            <line clip-path="url(#clipPath53)" fill="none" x1="160" x2="157"
+                  y1="512" y2="505"/>
+            <line clip-path="url(#clipPath53)" fill="none" x1="157" x2="154"
+                  y1="505" y2="512"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="814" x2="814"
                   y1="498" y2="585"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="779" x2="157"
+            <line clip-path="url(#clipPath50)" fill="none" x1="814" x2="157"
                   y1="585" y2="585"/>
             <line clip-path="url(#clipPath50)" fill="none" x1="157" x2="157"
                   y1="585" y2="505"/>
-            <text x="187" y="578" clip-path="url(#clipPath60)" fill="black"
-                  stroke="none" xml:space="preserve">[min(ran(extract([31,90], data)))&lt;SCAN_THRESHOLD]/obstacle!Direction::left</text>
-            <line clip-path="url(#clipPath52)" fill="none" x1="160" x2="157"
+            <text x="192" y="578" clip-path="url(#clipPath52)" fill="black"
+                  font-style="normal" stroke="none" xml:space="preserve">[min(ran(extract([271,330], data)))&lt;SCAN_THRESHOLD]/obstacle!Direction::right</text>
+            <line clip-path="url(#clipPath53)" fill="none" x1="160" x2="157"
                   y1="512" y2="505"/>
-            <line clip-path="url(#clipPath52)" fill="none" x1="157" x2="154"
+            <line clip-path="url(#clipPath53)" fill="none" x1="157" x2="154"
                   y1="505" y2="512"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="779" x2="779"
-                  y1="498" y2="675"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="779" x2="157"
-                  y1="675" y2="675"/>
-            <line clip-path="url(#clipPath50)" fill="none" x1="157" x2="157"
-                  y1="675" y2="505"/>
-            <text x="192" y="668" clip-path="url(#clipPath51)" fill="black"
-                  stroke="none" xml:space="preserve">[min(ran(extract([271,330], data)))&lt;SCAN_THRESHOLD]/obstacle!Direction::right</text>
-            <line clip-path="url(#clipPath52)" fill="none" x1="160" x2="157"
+            <line clip-path="url(#clipPath50)" fill="none" x1="814" x2="814"
+                  y1="498" y2="630"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="814" x2="154"
+                  y1="630" y2="630"/>
+            <line clip-path="url(#clipPath50)" fill="none" x1="154" x2="154"
+                  y1="630" y2="505"/>
+            <text x="164" y="608" clip-path="url(#clipPath55)" fill="black"
+                  font-style="normal" stroke="none" xml:space="preserve">[not (min(ran(extract(union([331,359], [0,30]), data)))&lt;SCAN_THRESHOLD\/min(ran(extract([31,90], data)))</text>
+            <text x="247" y="623" clip-path="url(#clipPath55)" fill="black"
+                  font-style="normal" stroke="none" xml:space="preserve">&lt;SCAN_THRESHOLD\/min(ran(extract([271,330], data)))&lt;SCAN_THRESHOLD)]</text>
+            <line clip-path="url(#clipPath56)" fill="none" x1="157" x2="154"
                   y1="512" y2="505"/>
-            <line clip-path="url(#clipPath52)" fill="none" x1="157" x2="154"
+            <line clip-path="url(#clipPath56)" fill="none" x1="154" x2="151"
                   y1="505" y2="512"/>
         </g>
     </g>
