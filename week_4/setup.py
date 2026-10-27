@@ -1,3 +1,5 @@
+import os
+from glob import glob
 from setuptools import find_packages, setup
 
 package_name = 'week_4'
@@ -10,6 +12,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*.[pxy][yma]'))),
     ],
     package_data={'': ['py.typed']},
     install_requires=['setuptools'],
@@ -29,8 +32,8 @@ setup(
             'week_4_state_machine = week_4.week_4_state_machine:main',
             'task3 = week_4.task3:main',
             'task7 = week_4.task7:main',
+            'task8_DetectorFSM = week_4.task8_DetectorFSM:main',
             'task8_TurtleBot3FSMRC = week_4.task8_TurtleBot3FSMRC:main'
-        
         ],
     },
 )

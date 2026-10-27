@@ -135,8 +135,6 @@ class TurtleBot3FSMNode(Node):
 
 
 def main(args=None):
-    signal.signal(signal.SIGINT, lambda signum, frame: None)
-
     rclpy.init(args=args)
     node = TurtleBot3FSMNode()
 

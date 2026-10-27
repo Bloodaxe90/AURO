@@ -1,0 +1,27 @@
+[0.878s] Invoking command in '/workspaces/AURO/week_4/build/week_4': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/workspaces/AURO/week_4/build/week_4/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/workspaces/AURO/week_4/install/week_4/lib/python3.14/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /workspaces/AURO/week_4/build/week_4/build --no-deps symlink_data
+[1.138s] running develop
+[1.299s] running egg_info
+[1.314s] creating week_4.egg-info
+[1.315s] writing week_4.egg-info/PKG-INFO
+[1.315s] writing dependency_links to week_4.egg-info/dependency_links.txt
+[1.315s] writing entry points to week_4.egg-info/entry_points.txt
+[1.315s] writing requirements to week_4.egg-info/requires.txt
+[1.315s] writing top-level names to week_4.egg-info/top_level.txt
+[1.315s] writing manifest file 'week_4.egg-info/SOURCES.txt'
+[1.347s] reading manifest file 'week_4.egg-info/SOURCES.txt'
+[1.347s] writing manifest file 'week_4.egg-info/SOURCES.txt'
+[1.363s] running build_ext
+[1.363s] Creating /workspaces/AURO/week_4/install/week_4/lib/python3.14/site-packages/week-4.egg-link (link to .)
+[1.364s] Installing task3 script to /workspaces/AURO/week_4/install/week_4/lib/week_4
+[1.364s] Installing task7 script to /workspaces/AURO/week_4/install/week_4/lib/week_4
+[1.364s] Installing task8_DetectorFSM script to /workspaces/AURO/week_4/install/week_4/lib/week_4
+[1.364s] Installing task8_TurtleBot3FSMRC script to /workspaces/AURO/week_4/install/week_4/lib/week_4
+[1.364s] Installing week_4 script to /workspaces/AURO/week_4/install/week_4/lib/week_4
+[1.364s] Installing week_4_state_machine script to /workspaces/AURO/week_4/install/week_4/lib/week_4
+[1.365s] 
+[1.365s] Installed /workspaces/AURO/week_4/build/week_4
+[1.365s] running symlink_data
+[1.365s] creating /workspaces/AURO/week_4/install/week_4/share/ament_index/resource_index/packages
+[1.365s] symbolically linking /workspaces/AURO/week_4/build/week_4/resource/week_4 -> /workspaces/AURO/week_4/install/week_4/share/ament_index/resource_index/packages
+[1.365s] symbolically linking /workspaces/AURO/week_4/build/week_4/package.xml -> /workspaces/AURO/week_4/install/week_4/share/week_4
+[1.387s] Invoked command in '/workspaces/AURO/week_4/build/week_4' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/workspaces/AURO/week_4/build/week_4/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/workspaces/AURO/week_4/install/week_4/lib/python3.14/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /workspaces/AURO/week_4/build/week_4/build --no-deps symlink_data

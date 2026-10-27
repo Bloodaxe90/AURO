@@ -1,0 +1,25 @@
+running develop
+running egg_info
+creating week_4.egg-info
+writing week_4.egg-info/PKG-INFO
+writing dependency_links to week_4.egg-info/dependency_links.txt
+writing entry points to week_4.egg-info/entry_points.txt
+writing requirements to week_4.egg-info/requires.txt
+writing top-level names to week_4.egg-info/top_level.txt
+writing manifest file 'week_4.egg-info/SOURCES.txt'
+reading manifest file 'week_4.egg-info/SOURCES.txt'
+writing manifest file 'week_4.egg-info/SOURCES.txt'
+running build_ext
+Creating /workspaces/AURO/week_4/install/week_4/lib/python3.14/site-packages/week-4.egg-link (link to .)
+Installing task3 script to /workspaces/AURO/week_4/install/week_4/lib/week_4
+Installing task7 script to /workspaces/AURO/week_4/install/week_4/lib/week_4
+Installing task8_DetectorFSM script to /workspaces/AURO/week_4/install/week_4/lib/week_4
+Installing task8_TurtleBot3FSMRC script to /workspaces/AURO/week_4/install/week_4/lib/week_4
+Installing week_4 script to /workspaces/AURO/week_4/install/week_4/lib/week_4
+Installing week_4_state_machine script to /workspaces/AURO/week_4/install/week_4/lib/week_4
+
+Installed /workspaces/AURO/week_4/build/week_4
+running symlink_data
+creating /workspaces/AURO/week_4/install/week_4/share/ament_index/resource_index/packages
+symbolically linking /workspaces/AURO/week_4/build/week_4/resource/week_4 -> /workspaces/AURO/week_4/install/week_4/share/ament_index/resource_index/packages
+symbolically linking /workspaces/AURO/week_4/build/week_4/package.xml -> /workspaces/AURO/week_4/install/week_4/share/week_4

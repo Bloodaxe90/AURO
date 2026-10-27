@@ -69,7 +69,8 @@ class TurtleBot3FSMC(StateMachine):
 
         # Check transitions out of state Turning.
         def transitions(self):
-            # TODO: Implement transitions    
+            # TODO: Implement transitions  
+            pass  
 
 # The robotic platform: its operations and events.
 class TurtleBot3Platform(Scope):
