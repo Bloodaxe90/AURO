@@ -2,7 +2,7 @@
 This is the repository for the AURO course's practicals. It is based on Ubuntu 26.04 LTS and contain.
 
 # Podman configuration
-You can use the included script [setup-podman.sh](setup-podman.sh) to configure Podman under Linux in the CS labs (CSE/069 and CSE/270) for running the Dev Containers used in this repository. That automated setup script configures Podman to store images under `/scratch/$USER/containers` and to map your UID to the `ubuntu` user used in the container.
+You can use the included script [setup-podman.sh](setup-podman.sh) to configure Podman and VS Code under Linux in the CS labs (CSE/069 and CSE/270) for running the Dev Containers used in this repository. That automated setup script configures Podman to store images under `/scratch/$USER/containers` and to map your UID to the `ubuntu` user used in the container.
 
 # Dev containers
 If you have Podman (or Docker) and VS Code installed, you can use the following instructions to spin up
