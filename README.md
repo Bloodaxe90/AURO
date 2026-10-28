@@ -24,7 +24,7 @@ the Dev Container configuration contained in this repository to get started with
 The default user in a container is `ubuntu` and it comes with `sudo` privileges allowing you to install additional software if needed.
 
 ## Included software
-The base image provides a custom installation of ROS2 Lyrical Luth, based on Ubuntu 26.04 LTS, targetting both x86_64 and arm64 architectures. 
+The [base image](https://github.com/UoY-RoboStar/ros2-tb3/tree/lyrical) provides a custom installation of ROS2 Lyrical Luth, based on Ubuntu 26.04 LTS, targetting both x86_64 and arm64 architectures. 
 
 It includes ROS2 packages for:
 * [TurtleBot3](https://docs.robotis.com/docs/systems/turtlebot3/overview/)
