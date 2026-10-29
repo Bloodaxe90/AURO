@@ -14,9 +14,18 @@ controller ctrl2 {
 		}
 		transition t1 {
 			from s0
-			to s0
+			to s1
 			trigger left ? x
 			action right ! x
+		}
+		event  ack
+		state s1 {
+		}
+		transition t2 {
+			from s1
+			to s0
+			trigger 
+		ack
 		}
 	}
 
@@ -33,14 +42,23 @@ controller ctrl2 {
 		}
 		transition t1 {
 			from s0
-			to s0
+			to s1
 			trigger left ? x
 			action right ! x
+		}
+		event  ack
+		state s1 {
+		}
+		transition t2 {
+			from s1
+			to s0
+			action ack
 		}
 	}
 
 	connection ctrl2 on left to stm0 on left
 	connection stm0 on right to stm1 on left
 	connection stm1 on right to ctrl2 on right
+connection stm1 on ack to stm0 on ack
 }
 
