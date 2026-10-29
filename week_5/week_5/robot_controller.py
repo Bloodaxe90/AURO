@@ -63,6 +63,11 @@ class RobotController(Node):
         self.timer_period = 0.1 # 100 milliseconds = 10 Hz
         self.timer = self.create_timer(self.timer_period, self.control_loop)
 
+        self.old_front_ranges = []
+        self.old_left_ranges = []
+        self.old_back_ranges = []
+        self.old_right_ranges = []
+
 
     def odom_callback(self, msg):
         self.pose = msg.pose.pose
@@ -76,10 +81,24 @@ class RobotController(Node):
 
 
     def scan_callback(self, msg):
-        front_ranges = msg.ranges[331:359] + msg.ranges[0:30]
-        left_ranges  = msg.ranges[31:90]
-        back_ranges  = msg.ranges[91:270]
-        right_ranges = msg.ranges[271:330]
+        
+        def get_valid_ranges(raw_slice):
+            return [r for r in raw_slice if math.isfinite(r) and r > 0.0]
+
+        raw_front = msg.ranges[331:359] + msg.ranges[0:30]
+        raw_left  = msg.ranges[31:90]
+        raw_back  = msg.ranges[91:270]
+        raw_right = msg.ranges[271:330]
+
+        front_ranges = get_valid_ranges(raw_front) or getattr(self, 'old_front_ranges', [float('inf')])
+        left_ranges  = get_valid_ranges(raw_left)  or getattr(self, 'old_left_ranges',  [float('inf')])
+        back_ranges  = get_valid_ranges(raw_back)  or getattr(self, 'old_back_ranges',  [float('inf')])
+        right_ranges = get_valid_ranges(raw_right) or getattr(self, 'old_right_ranges', [float('inf')])
+
+        self.old_front_ranges = front_ranges
+        self.old_left_ranges  = left_ranges
+        self.old_back_ranges  = back_ranges
+        self.old_right_ranges = right_ranges
 
         self.scan_triggered[SCAN_FRONT] = min(front_ranges) < SCAN_THRESHOLD 
         self.scan_triggered[SCAN_LEFT]  = min(left_ranges)  < SCAN_THRESHOLD
