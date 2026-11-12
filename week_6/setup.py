@@ -36,6 +36,10 @@ setup(
             'path_publisher = week_6.path_publisher:main',
             'true_frames = week_6.true_frames:main',
             'visual_sensor = week_6.visual_sensor:main',
+            'barrel_data = week_6.barrel_data:main',
+            'barrel_data_plotter = week_6.barrel_data_plotter:main',
+
+
         ],
     },
 )
