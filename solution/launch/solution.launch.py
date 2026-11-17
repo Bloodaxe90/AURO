@@ -80,6 +80,8 @@ NODE_ARGUMENTS = {
     'task1': {
     },
     'task2': {
+        'source_cell': 'C4',
+        'target_cell': 'N4',
     },
 }
 
@@ -102,9 +104,14 @@ def launch_task(context):
                   if value != ''}
     parameters = values(NODE_ARGUMENTS)
 
+    nodes = [Node(package='solution', executable=task, parameters=[parameters], output='screen')]
+
     if task == 'task1':
         # What tells the node how Nav2 finds out where the robot is
         parameters['localizer'] = 'slam_toolbox' if assessment.get('nav2') == 'slam' else 'amcl'
+
+    if task == 'task2':
+        nodes.append(Node(package='solution', executable='crane_controller', output='screen'))
 
     return [
         # Included launch files see the arguments of this one: without forwarding off, task2 would
@@ -113,7 +120,7 @@ def launch_task(context):
             IncludeLaunchDescription(PythonLaunchDescriptionSource(os.path.join(
                 get_package_share_directory('assessment'), 'launch', 'assessment.launch.py'))),
         ]),
-        Node(package='solution', executable=task, parameters=[parameters], output='screen'),
+        *nodes,
     ]
 
 

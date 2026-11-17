@@ -3,6 +3,7 @@ from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from sensor_msgs.msg import JointState
 from std_msgs.msg import Float64MultiArray
+from std_msgs.msg import Bool, Float64MultiArray
 
 # Only the joint for the crane
 JOINTS = ['bridge_slide', 'winch_block_slide', 'winch_lift'] # x y z
@@ -16,6 +17,7 @@ class CraneController(Node):
     def __init__(self):
         super().__init__('crane_controller')
 
+        # TODO: arbritrary values find good ones
         # PD coefficients for x, y, z
         self.Kp = [float(self.declare_parameter('Kp_x', 300.0).value),
                    float(self.declare_parameter('Kp_y', 300.0).value),
@@ -24,19 +26,28 @@ class CraneController(Node):
                    float(self.declare_parameter('Kd_y', 300.0).value),
                    float(self.declare_parameter('Kd_z', 300.0).value)]
 
+        # Tolerances for determining if the crane is at the target position and the target velocity is zero
+        self.position_tolerance = float(self.declare_parameter('position_tolerance', 0.02).value)
+        self.velocity_tolerance = float(self.declare_parameter('velocity_tolerance', 0.02).value)
+
         self.max_error = float(self.declare_parameter('max_error', 1.5).value) # ensuring the crane doesn't move too fast
 
-        self.declare_parameter('carrying', False)
-
         self.desired_joint_positions = None
+        self.carrying = False
 
         self.joint_sub = self.create_subscription(
             JointState, '/crane/joint_states', self.joint_callback, 10)
         self.command_sub = self.create_subscription(
             Float64MultiArray, '/crane/position_commands', self.command_callback, 10)
+        self.carrying_sub = self.create_subscription(
+            Bool, '/crane/carrying', self.carrying_callback, 10)
 
         self.command_pub = self.create_publisher(
             Float64MultiArray, '/crane/effort_controller/commands', 10)
+        self.at_target_pub = self.create_publisher(Bool, '/crane/at_target', 10)
+
+    def carrying_callback(self, msg: Bool):
+        self.carrying = msg.data
 
     def command_callback(self, msg: Float64MultiArray):
         if len(msg.data) != len(JOINTS):
@@ -66,10 +77,16 @@ class CraneController(Node):
             efforts.append(self.Kp[i] * error - self.Kd[i] * joint_velocities[i])
 
         # Gravity on the winch to hold its weight and thwe rods if necessary
-        mass = WINCH_MASS + (ROD_MASS if self.get_parameter('carrying').value else 0.0)
+        mass = WINCH_MASS + (ROD_MASS if self.carrying else 0.0)
         efforts[2] += mass * GRAVITY
 
         self.command_pub.publish(Float64MultiArray(data=efforts))
+
+        at_target = all(
+            abs(self.desired_joint_positions[i] - joint_positions[i]) < self.position_tolerance
+            and abs(joint_velocities[i]) < self.velocity_tolerance
+            for i in range(len(JOINTS)))
+        self.at_target_pub.publish(Bool(data=at_target))
 
 
 def main():
