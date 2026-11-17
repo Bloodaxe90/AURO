@@ -5,7 +5,7 @@ from sensor_msgs.msg import JointState
 from std_msgs.msg import Float64MultiArray
 
 # Only the joint for the crane
-JOINTS = ['bridge_slide', 'winch_block_slide', 'winch_lift']
+JOINTS = ['bridge_slide', 'winch_block_slide', 'winch_lift'] # x y z
 GRAVITY = 9.81
 WINCH_MASS = 100.0
 ROD_MASS = 100.0
@@ -46,13 +46,14 @@ class CraneController(Node):
 
     def joint_callback(self, msg: JointState):
 
-        for joint in JOINTS:
-            if joint not in msg.name:
+        try:
+            joint_indices = [msg.name.index(joint) for joint in JOINTS]
+        except ValueError:
                 self.get_logger().error(f"Expected joint {joint} data from /crane/joint_states not recieved")
-                return
+            return
 
-        joint_positions = [float(msg.position[i]) for i in range(len(JOINTS))]
-        joint_velocities = [float(msg.velocity[i]) if len(msg.velocity) > i else 0.0 for i in range(len(JOINTS))]
+        joint_positions = [float(msg.position[j]) for j in joint_indices]
+        joint_velocities = [float(msg.velocity[j]) for j in joint_indices]
 
         # Until given a target hold the crane where it is
         if self.desired_joint_positions is None:
@@ -60,7 +61,7 @@ class CraneController(Node):
 
         # PD control
         efforts = []
-        for i in range(len(JOINTS)):
+        for i in joint_indices:
             error = max(-self.max_error, min(self.max_error, self.desired_joint_positions[i] - joint_positions[i]))
             efforts.append(self.Kp[i] * error - self.Kd[i] * joint_velocities[i])
 
