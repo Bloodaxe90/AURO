@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!-- A barrel that robots can pick up: it is spawned by barrel_manager, which names it
+     barrel_<n>, and attached to a robot by its link "body". Not static, so that it can be
+     attached, and dragged along behind the robot that holds it. -->
+<sdf version="1.9">
+  <model name="barrel">
+    <static>false</static>
+    <link name="body">
+      <pose>0 0 0.15 0 0 0</pose>
+      <inertial>
+        <mass>0.1</mass>
+        <!-- A solid cylinder: ixx = iyy = m (3 r^2 + h^2) / 12, izz = m r^2 / 2 -->
+        <inertia>
+          <ixx>0.001</ixx>
+          <iyy>0.001</iyy>
+          <izz>0.0005</izz>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry><cylinder><radius>0.1</radius><length>0.3</length></cylinder></geometry>
+        <surface>
+          <friction>
+            <ode>
+              <mu>0.5</mu>
+              <mu2>0.5</mu2>
+            </ode>
+          </friction>
+        </surface>
+      </collision>
+      <visual name="visual">
+        <geometry><cylinder><radius>0.1</radius><length>0.3</length></cylinder></geometry>
+        <material>
+          <ambient>0 0 1 1</ambient>
+          <diffuse>0 0 1 1</diffuse>
+          <specular>0 0 0 1</specular>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>
