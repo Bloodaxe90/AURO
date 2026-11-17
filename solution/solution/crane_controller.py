@@ -49,7 +49,7 @@ class CraneController(Node):
         try:
             joint_indices = [msg.name.index(joint) for joint in JOINTS]
         except ValueError:
-                self.get_logger().error(f"Expected joint {joint} data from /crane/joint_states not recieved")
+            self.get_logger().error(f"Expected joint data from /crane/joint_states not recieved")
             return
 
         joint_positions = [float(msg.position[j]) for j in joint_indices]
@@ -61,7 +61,7 @@ class CraneController(Node):
 
         # PD control
         efforts = []
-        for i in joint_indices:
+        for i in range(len(JOINTS)):
             error = max(-self.max_error, min(self.max_error, self.desired_joint_positions[i] - joint_positions[i]))
             efforts.append(self.Kp[i] * error - self.Kd[i] * joint_velocities[i])
 
