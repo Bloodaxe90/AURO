@@ -36,6 +36,9 @@ setup(
         'console_scripts': [
             'barrel_manager = week_7.barrel_manager:main',
             'move_action_node = week_7.move_action_node:main',
+            'robot_teleop_barrel = week_7.robot_teleop_barrel:main',
+            'argos_obstacle_avoidance = week_7.argos_obstacle_avoidance:main',
+
         ],
     },
 )
