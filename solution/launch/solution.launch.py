@@ -80,7 +80,7 @@ NODE_ARGUMENTS = {
     'task1': {
     },
     'task2': {
-        'source_cell': 'C4',
+        'source_cell': 'M0',
         'target_cell': 'N4',
     },
 }

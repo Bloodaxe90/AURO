@@ -28,6 +28,7 @@ setup(
             'task1 = solution.task1:main',
             'task2 = solution.task2:main',
             'crane_controller = solution.crane_controller:main',
+            'cell_identifier = solution.cell_identifier:main',
         ],
     },
 )

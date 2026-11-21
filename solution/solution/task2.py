@@ -13,17 +13,25 @@ from std_msgs.msg import Bool, Float64MultiArray
 from ros_gz_interfaces.srv import ControlWorld
 from assessment_interfaces.srv import CellPose
 
+from cv_bridge import CvBridge
+from sensor_msgs.msg import Image
 from solution.move_rod_fsm import CranePlatform, MoveRod
+from solution.cell_identifier import identify_pool_cells
 
 class Task2(Node):
 
     def __init__(self):
         super().__init__('task2')
+
+        self.bridge = CvBridge()
+        self.image = None
+
         source_cell = self.declare_parameter('source_cell', 'C4').value
         target_cell = self.declare_parameter('target_cell', 'N4').value
 
         # subscribers
         self.create_subscription(Bool, '/crane/at_target', self.at_target_callback, 10)
+        self.create_subscription(Image, '/crane/winch_camera/image', self.image_callback, 10)
 
         # publishers
         self.target_pub = self.create_publisher(Float64MultiArray, '/crane/position_commands', 10)
@@ -40,7 +48,7 @@ class Task2(Node):
         self.platform = CranePlatform(
             send_target=self.send_target, set_carrying=self.set_carrying,
             release_brake=self.release_brake, engage_brake=self.engage_brake, attach=self.attach, detach=self.detach,
-            cell_pose=self.cell_pose)
+            cell_pose=self.cell_pose, identify_pool=self.identify_pool)
 
         # state machine
         self.timer_period = 0.1
@@ -69,6 +77,9 @@ class Task2(Node):
     def at_target_callback(self, msg):
         if msg.data:
             self.platform.at_target.set()
+
+    def image_callback(self, msg):
+        self.image = msg
 
     # PUBLISHERS
 
@@ -113,6 +124,16 @@ class Task2(Node):
             if not future.done():
                 client.remove_pending_request(future)
         return future.result()
+
+    # other stuff
+
+    def identify_pool(self, pool, x, y, z):
+        # forget older frames and wait for the next one
+        self.image = None
+        while self.image is None:
+            yield
+        image = self.bridge.imgmsg_to_cv2(self.image, desired_encoding='bgr8')
+        return identify_pool_cells(image, pool, x, y, z)
 
     # pre-existing code    
 

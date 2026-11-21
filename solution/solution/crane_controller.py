@@ -11,7 +11,6 @@ GRAVITY = 9.81
 WINCH_MASS = 100.0
 ROD_MASS = 100.0
 
-
 class CraneController(Node):
 
     def __init__(self):
@@ -19,12 +18,12 @@ class CraneController(Node):
 
         # TODO: arbritrary values find good ones
         # PD coefficients for x, y, z
-        self.Kp = [float(self.declare_parameter('Kp_x', 300.0).value),
-                   float(self.declare_parameter('Kp_y', 300.0).value),
-                   float(self.declare_parameter('Kp_z', 300.0).value)]
-        self.Kd = [float(self.declare_parameter('Kd_x', 300.0).value),
-                   float(self.declare_parameter('Kd_y', 300.0).value),
-                   float(self.declare_parameter('Kd_z', 300.0).value)]
+        self.Kp = [float(self.declare_parameter('Kp_x', 850.0).value), # Bridge + winch block + winch mass + (rod mass / 2)
+                   float(self.declare_parameter('Kp_y', 350.0).value), # winch block + winch mass + (rod mass / 2)
+                   float(self.declare_parameter('Kp_z', 150.0).value)] # winch mass + (rod mass / 2)
+        self.Kd = [float(self.declare_parameter('Kd_x', 1700.0).value), # Kp x2
+                   float(self.declare_parameter('Kd_y', 700.0).value), # Kp x2
+                   float(self.declare_parameter('Kd_z', 300.0).value)] # Kp x2
 
         # Tolerances for determining if the crane is at the target position and the target velocity is zero
         self.position_tolerance = float(self.declare_parameter('position_tolerance', 0.02).value)
