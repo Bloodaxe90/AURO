@@ -7,7 +7,7 @@ from std_msgs.msg import Bool, Float64MultiArray
 
 # Only the joint for the crane
 JOINTS = ['bridge_slide', 'winch_block_slide', 'winch_lift'] # x y z
-GRAVITY = 9.81
+GRAVITY = 9.8
 WINCH_MASS = 100.0
 ROD_MASS = 100.0
 
@@ -25,9 +25,9 @@ class CraneController(Node):
                    float(self.declare_parameter('Kd_y', 700.0).value), # Kp x2
                    float(self.declare_parameter('Kd_z', 300.0).value)] # Kp x2
 
-        # Tolerances for determining if the crane is at the target position and the target velocity is zero
-        self.position_tolerance = float(self.declare_parameter('position_tolerance', 0.02).value)
-        self.velocity_tolerance = float(self.declare_parameter('velocity_tolerance', 0.02).value)
+        # Tolerances for determining if the crane is at the target position and the target velocity is zero, Low since the rod has a 0.025 m play in the cell
+        self.position_tolerance = float(self.declare_parameter('position_tolerance', 0.005).value)
+        self.velocity_tolerance = float(self.declare_parameter('velocity_tolerance', 0.01).value)
 
         self.max_error = float(self.declare_parameter('max_error', 1.5).value) # ensuring the crane doesn't move too fast
 

@@ -12,10 +12,10 @@ from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy
 from std_msgs.msg import Bool, Float64MultiArray
 from ros_gz_interfaces.srv import ControlWorld
 from assessment_interfaces.srv import CellPose
+from sensor_msgs.msg import Image, JointState
 
 from cv_bridge import CvBridge
-from sensor_msgs.msg import Image
-from solution.move_rod_fsm import CranePlatform, MoveRod
+from solution.move_rods_fsm import CranePlatform, MoveRods
 from solution.cell_identifier import identify_pool_cells
 
 class Task2(Node):
@@ -26,12 +26,16 @@ class Task2(Node):
         self.bridge = CvBridge()
         self.image = None
 
-        source_cell = self.declare_parameter('source_cell', 'C4').value
-        target_cell = self.declare_parameter('target_cell', 'N4').value
+        rods_to_move = self.declare_parameter('rods_to_move', 'M0:N8,N8:M0').value
+
+        self.crane_x = 0.0
+        self.crane_y = 0.0
 
         # subscribers
         self.create_subscription(Bool, '/crane/at_target', self.at_target_callback, 10)
         self.create_subscription(Image, '/crane/winch_camera/image', self.image_callback, 10)
+        self.create_subscription(JointState, '/crane/joint_states', self.joint_callback, 10)
+
 
         # publishers
         self.target_pub = self.create_publisher(Float64MultiArray, '/crane/position_commands', 10)
@@ -48,13 +52,13 @@ class Task2(Node):
         self.platform = CranePlatform(
             send_target=self.send_target, set_carrying=self.set_carrying,
             release_brake=self.release_brake, engage_brake=self.engage_brake, attach=self.attach, detach=self.detach,
-            cell_pose=self.cell_pose, identify_pool=self.identify_pool)
+            cell_pose=self.cell_pose, crane_pose=self.crane_pose, identify_pool=self.identify_pool)
 
         # state machine
         self.timer_period = 0.1
         self.time_unit = 1
-        self.move_rod_fsm = MoveRod(self.get_logger(), self.timer_period, self.time_unit,
-                           parent=self.platform, source_cell=source_cell, target_cell=target_cell,
+        self.move_rod_fsm = MoveRods(self.get_logger(), self.timer_period, self.time_unit,
+                           parent=self.platform, rods_to_move=rods_to_move,
                            on_change=self.on_change)
         self.timer = self.create_timer(self.timer_period, self.control_loop)
 
@@ -65,13 +69,6 @@ class Task2(Node):
                              reliability=ReliabilityPolicy.RELIABLE)
         self.create_subscription(Bool, '/simulation_ready', self.on_ready, latched)
 
-    def control_loop(self):
-        if self.simulation_ready and not self.move_rod_fsm.finished:
-            self.move_rod_fsm.execute()
-
-    def on_change(self, configuration):
-        self.get_logger().info(f'State: {configuration}')
-
     # CALLBACKS
 
     def at_target_callback(self, msg):
@@ -80,6 +77,13 @@ class Task2(Node):
 
     def image_callback(self, msg):
         self.image = msg
+
+    def joint_callback(self, msg):
+        try:
+            self.crane_x = float(msg.position[msg.name.index('bridge_slide')])
+            self.crane_y = float(msg.position[msg.name.index('winch_block_slide')])
+        except ValueError:
+            pass
 
     # PUBLISHERS
 
@@ -134,6 +138,16 @@ class Task2(Node):
             yield
         image = self.bridge.imgmsg_to_cv2(self.image, desired_encoding='bgr8')
         return identify_pool_cells(image, pool, x, y, z)
+
+    def control_loop(self):
+        if self.simulation_ready and not self.move_rod_fsm.finished:
+            self.move_rod_fsm.execute()
+
+    def on_change(self, configuration):
+        self.get_logger().info(f'State: {configuration}')
+
+    def crane_pose(self):
+        return self.crane_x, self.crane_y
 
     # pre-existing code    
 

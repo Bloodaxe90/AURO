@@ -80,8 +80,7 @@ NODE_ARGUMENTS = {
     'task1': {
     },
     'task2': {
-        'source_cell': 'M0',
-        'target_cell': 'N4',
+        'rods_to_move': 'M0:N8,N8:M0,M0:N8,N8:M0',
     },
 }
 
