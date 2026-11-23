@@ -665,16 +665,6 @@
       <static>true</static>
     </include>
 
-    <!-- Carts -->
-
-    <include>
-      <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/cart_model_2
-      </uri>
-      <name>cart1</name>
-      <pose>-5.73 15 0.25 0 -0 0</pose>
-    </include>
-
     <!-- 29.5 x 25.4 m concrete floor slab, 0.1 m thick, top at z = 0.1 m,
          with a 19.5 x 6 m opening in the middle (where the pool block sits) -->
     <model name="floor">
@@ -8982,7 +8972,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9003,7 +8993,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9024,7 +9014,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9045,7 +9035,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9066,7 +9056,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9087,7 +9077,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9108,7 +9098,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9129,7 +9119,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9150,7 +9140,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9171,7 +9161,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9192,7 +9182,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9213,7 +9203,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9234,7 +9224,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9255,7 +9245,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9276,7 +9266,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9297,7 +9287,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9318,7 +9308,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9339,7 +9329,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9360,7 +9350,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9381,7 +9371,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9402,7 +9392,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9423,7 +9413,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9444,7 +9434,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
@@ -9465,7 +9455,7 @@
         </inertial>
         <visual name="visual">
           <pose>0 0 -1.1 0 0 0</pose>
-          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.5 0.5 0.5</scale></mesh></geometry>
+          <geometry><mesh><uri>package://assessment/worlds/meshes/control_rod.dae</uri><scale>0.45 0.45 0.5</scale></mesh></geometry>
         </visual>
         <collision name="collision">
           <geometry><box><size>0.35 0.35 1.9</size></box></geometry>
