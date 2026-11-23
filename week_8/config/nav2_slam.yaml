@@ -1,0 +1,11 @@
+# Added on top of the Nav2 parameters by launch/launch.py with nav2:=slam.
+#
+# Without a rolling window the global costmap takes the size of the map, which with SLAM is only
+# what has been mapped so far, so goals outside it would be rejected. This window is sized for the
+# whole arena from any point in it: make it smaller for a smaller world, as it costs CPU.
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      rolling_window: true
+      width: 30
+      height: 30
