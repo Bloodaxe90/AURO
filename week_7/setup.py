@@ -14,10 +14,12 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*.py'))),
+        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*.yaml'))),
         (os.path.join('share', package_name, 'config'), glob(os.path.join('config', '*.yaml'))),
         (os.path.join('share', package_name, 'rviz'), glob(os.path.join('rviz', '*.rviz'))),
         (os.path.join('share', package_name, 'worlds'), glob(os.path.join('worlds', '*.world'))),
         (os.path.join('share', package_name, 'models'), glob(os.path.join('models', '*.sdf'))),
+        (os.path.join('share', package_name, 'pddl'), glob(os.path.join('pddl', '*.pddl'))),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -32,7 +34,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'barrel_manager = week_7.barrel_manager:main'
+            'barrel_manager = week_7.barrel_manager:main',
+            'move_action_node = week_7.move_action_node:main',
         ],
     },
 )

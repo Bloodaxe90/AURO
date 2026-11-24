@@ -1,0 +1,42 @@
+# Added on top of the Nav2 parameters by launch/launch.py with keepout_mask:=<mask.yaml>.
+#
+# Both costmaps keep out of the mask's areas, with Nav2's KeepoutFilter: where the mask is black,
+# the robot cannot go, and its grey cells cost what they say. The filter runs after the inflation
+# layer, so it does not inflate the mask: make one with an inflated edge, with
+#   ros2 run keepout_mask make_mask shapes.yaml --output my_mask
+# (see keepout_mask's README), or paths run right along it.
+#
+# This sets the costmaps' filters, so it replaces any that params_file has.
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      filters: ["keepout_filter"]
+      keepout_filter:
+        plugin: "nav2_costmap_2d::KeepoutFilter"
+        enabled: true
+        filter_info_topic: /keepout_costmap_filter_info
+
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      filters: ["keepout_filter"]
+      keepout_filter:
+        plugin: "nav2_costmap_2d::KeepoutFilter"
+        enabled: true
+        filter_info_topic: /keepout_costmap_filter_info
+
+# The mask is in frame_id. With nav2:=<map.yaml>, map is that map's frame. With nav2:=slam, map
+# starts where the robot started, so give make_mask the robot's start position as frame_origin if
+# the shapes are in world coordinates.
+keepout_filter_mask_server:
+  ros__parameters:
+    topic_name: /keepout_filter_mask
+    frame_id: map
+
+keepout_costmap_filter_info_server:
+  ros__parameters:
+    type: 0  # keepout
+    filter_info_topic: /keepout_costmap_filter_info
+    mask_topic: /keepout_filter_mask
+    base: 0.0
+    multiplier: 1.0
