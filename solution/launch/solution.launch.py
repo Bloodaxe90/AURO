@@ -80,7 +80,6 @@ NODE_ARGUMENTS = {
     'task1': {
     },
     'task2': {
-        'rods_to_move': 'M0:N8,N8:M0,M0:N8,N8:M0',
     },
 }
 
@@ -111,6 +110,8 @@ def launch_task(context):
 
     if task == 'task2':
         nodes.append(Node(package='solution', executable='crane_controller', output='screen'))
+        for name in ('control_rod_coefficient', 'replacement_level', 'maximum_power_level'):
+            parameters[name] = float(assessment.get(name, 0))
 
     return [
         # Included launch files see the arguments of this one: without forwarding off, task2 would

@@ -9,7 +9,7 @@ import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy
-from std_msgs.msg import Bool, Float64MultiArray
+from std_msgs.msg import Bool, Float64, Float64MultiArray
 from ros_gz_interfaces.srv import ControlWorld
 from assessment_interfaces.srv import CellPose
 from sensor_msgs.msg import Image, JointState
@@ -26,16 +26,25 @@ class Task2(Node):
         self.bridge = CvBridge()
         self.image = None
 
-        rods_to_move = self.declare_parameter('rods_to_move', 'M0:N8,N8:M0').value
-
         self.crane_x = 0.0
         self.crane_y = 0.0
+
+        self.current_power_value = None
+        self.target_power_value = None
+
+        control_rod_coefficient = float(self.declare_parameter('control_rod_coefficient', 0.2).value)
+        storage_rod_level = float(self.declare_parameter('replacement_level', 100.0).value)
+        maximum_power = float(self.declare_parameter('maximum_power_level', 0.0).value)
+        if maximum_power <= 0.0:
+            maximum_power = 100.0 * 93  # reactor_monitors default (93 fuel cells at level 100)
+        full_fuel_rod_power = 100.0 * 100.0 / maximum_power  # % of maximum power for one fuel rod at level 100
 
         # subscribers
         self.create_subscription(Bool, '/crane/at_target', self.at_target_callback, 10)
         self.create_subscription(Image, '/crane/winch_camera/image', self.image_callback, 10)
         self.create_subscription(JointState, '/crane/joint_states', self.joint_callback, 10)
-
+        self.create_subscription(Float64, '/current_power_level', self.current_power_callback, 10)
+        self.create_subscription(Float64, '/target_power_level', self.target_power_callback, 10)
 
         # publishers
         self.target_pub = self.create_publisher(Float64MultiArray, '/crane/position_commands', 10)
@@ -52,14 +61,18 @@ class Task2(Node):
         self.platform = CranePlatform(
             send_target=self.send_target, set_carrying=self.set_carrying,
             release_brake=self.release_brake, engage_brake=self.engage_brake, attach=self.attach, detach=self.detach,
-            cell_pose=self.cell_pose, crane_pose=self.crane_pose, identify_pool=self.identify_pool)
+            cell_pose=self.cell_pose, crane_pose=self.crane_pose, identify_pool=self.identify_pool,
+            current_power=self.current_power, target_power=self.target_power)
 
         # state machine
         self.timer_period = 0.1
         self.time_unit = 1
         self.move_rod_fsm = MoveRods(self.get_logger(), self.timer_period, self.time_unit,
-                           parent=self.platform, rods_to_move=rods_to_move,
-                           on_change=self.on_change)
+                                     parent=self.platform,
+                                     control_rod_coefficient=control_rod_coefficient,
+                                     full_fuel_rod_power=full_fuel_rod_power,
+                                     storage_rod_level=storage_rod_level,
+                                     on_change=self.on_change)
         self.timer = self.create_timer(self.timer_period, self.control_loop)
 
         # pre-existing code
@@ -84,6 +97,12 @@ class Task2(Node):
             self.crane_y = float(msg.position[msg.name.index('winch_block_slide')])
         except ValueError:
             pass
+
+    def current_power_callback(self, msg):
+        self.current_power_value = msg.data
+
+    def target_power_callback(self, msg):   
+        self.target_power_value = msg.data
 
     # PUBLISHERS
 
@@ -146,8 +165,15 @@ class Task2(Node):
     def on_change(self, configuration):
         self.get_logger().info(f'State: {configuration}')
 
+    # TODO change to getters to avoild name overlap
     def crane_pose(self):
         return self.crane_x, self.crane_y
+
+    def current_power(self):
+        return self.current_power_value
+
+    def target_power(self):
+        return self.target_power_value
 
     # pre-existing code    
 
