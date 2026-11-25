@@ -21,13 +21,9 @@ def nearest_canal(cells):
     return min(cells, key=lambda cell: abs(CELL_XY[cell][0]) + abs(CELL_XY[cell][1]))
 
 
-
 def power_level(total_reactor_fuel, num_removed_control_rods, control_rod_coefficient):
     # same as reactor_monitor.power_level() (total reactor fuel * (1 + control_rod_coefficient x control rods not in the reactor))
     return total_reactor_fuel * (1.0 + control_rod_coefficient * num_removed_control_rods)
-
-
-
 
 
 def best_move_combination(total_reactor_fuel, current_num_removed_control_rods, controls_left, storages_left, addable_storage_rod_power, control_rod_coefficient, target_power):
@@ -118,13 +114,14 @@ def next_rod_move(cells, current_power, target_power, control_rod_coefficient,
     return (nearest_canal(storage_fuel_rods), nearest_canal(reactor_empty_cells),
             f'Adding storage rod: planned {num_removable_control_rods} control rod, {num_addable_storage_rods} storage rod moves')
 
-def rods_to_read(cells, rod_levels, current_power, target_power, crane_x, crane_y):
-    # The next reactor fuel rods to read the level of nearest first from the crane at
-    read = [cell for cell in rod_levels if in_reactor(cell)]
-    if current_power - target_power <= TRIM_COST or len(read) >= READ_LIMIT:
+
+
+def rods_to_read(cells, rod_levels, read_cells, current_power, target_power, crane_x, crane_y):
+    # next reactor fuel rods to read the level of (nearest first)
+    if current_power - target_power <= TRIM_COST or len(read_cells) >= READ_LIMIT:
         return []
     unknown = [c for c, rod in cells.items() if in_reactor(c) and rod == 'fuel'
-               and c not in rod_levels]
+               and c not in rod_levels and c not in read_cells]
     # nearest neighbour order
     reads = []
     x, y = crane_x, crane_y
@@ -134,6 +131,7 @@ def rods_to_read(cells, rod_levels, current_power, target_power, crane_x, crane_
         unknown.remove(cell)
         x, y = CELL_XY[cell]
     return reads
+
 
 def new_target_cell(cells, target_cell):
     # An empty cell in the same pool as target_cell

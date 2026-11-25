@@ -12,7 +12,7 @@ IDENTIFY_POOL_CRANE_Z = -0.1 # crane fully raised
 HOVER_CRANE_Z = -6.0
 
 EXACT_TOLERANCE = 0.0 # uses the position and velocity tolerance values in crane_controller.py
-READ_WAYPOINT_TOLERANCE = 0.05 # must be kept low to ensure crane can still read rod levels
+READ_WAYPOINT_TOLERANCE = 0.03 # must be kept low to ensure crane can still read rod levels (extra issue at wall corners)
 WAYPOINT_TOLERANCE = 0.2 # must still be kept relatively low to allow a raise somewhat before moving after detaching (so not scaping rods)
 
 MOVE_TIMEOUT = 600 # Max time allowed to move between cells (60s)
@@ -101,7 +101,8 @@ class MoveRods(StateMachine):
     cells: dict[str, str] = {} # map of every cell in the pool and its type 'fuel', 'control', 'empty'
     rod_offsets: dict[str, list[float]] = {} # where placed rods sit in their cells (initial ones are assumed to be centered)
     rod_levels: dict[str, float] = {} # known levels of fuel rods by the cell they are in
-    read_cells: list[str] = [] # cells of the fuel rods to read the level of next
+    cells_to_read: list[str] = [] # cells of the fuel rods to read the level of next
+    read_cells: set[str] = set() # cells of the fuel rods that have been read to avoid reading the same rod twice
 
     # robot platform
     send_target: Required[Callable[[float, float, float, float], None]]
@@ -189,7 +190,7 @@ class MoveRods(StateMachine):
             if current_power is None or target_power is None:
                 return None # wait for the reactor monitor to publish the power levels
 
-            move = next_rod_move(self.cells, current_power, target_power, self.control_rod_coefficient,
+            move = next_rod_move(self.cells, current_power, target_power,self.control_rod_coefficient,
                                  self.full_fuel_rod_power, self.storage_rod_level, self.rod_levels)
 
             if move is not None:
@@ -202,11 +203,11 @@ class MoveRods(StateMachine):
                 return self.GetSource, action
             
             # no move worth making with the levels known: read some more, if worth it
-            reads = rods_to_read(self.cells, self.rod_levels, current_power, target_power,
+            reads = rods_to_read(self.cells, self.rod_levels, self.read_cells, current_power, target_power,
                                    *self.crane_pose())
             if reads:
                 def action():
-                    self.read_cells = reads
+                    self.cells_to_read = reads
                     self.logger.info(f'Power {current_power:.2f}% target {target_power:.2f}%: '
                                      f'reading the levels of {", ".join(reads)}')
                 return self.ReadRodLevels, action
@@ -450,10 +451,10 @@ class MoveRods(StateMachine):
     class ReadRodLevels(State):
 
         def entry(self):
-            for cell in self.read_cells:
+            for cell in self.cells_to_read:
                 found, cell_x, cell_y = yield from self.cell_pose(cell)
-                # passed through within WAYPOINT_TOLERANCE so kept further from walls
-                x, y = apply_crane_wall_safety(cell_x, cell_y, WAYPOINT_TOLERANCE)
+                # passed through within READ_WAYPOINT_TOLERANCE so kept further from walls
+                x, y = apply_crane_wall_safety(cell_x, cell_y, READ_WAYPOINT_TOLERANCE)
                 # hovering just above the rods
                 crane_x, _ = self.crane_pose()
                 waypoints = route(crane_x, x, y, WAYPOINT_TOLERANCE)
@@ -467,9 +468,10 @@ class MoveRods(StateMachine):
                     if not self.arrived:
                         return
 
+                self.read_cells = {*self.read_cells, cell}  # counted even if the read fails
                 found, level = yield from self.rod_level()
                 if not found:
-                    self.logger.warning(f'No fuel rod level read in {cell}')
+                    self.logger.warning(f'Failed to read fuel rod level in cell {cell}')
                     level = 0.0
                 self.rod_levels = {**self.rod_levels, cell: level}
                 self.logger.info(f'Fuel rod in {cell} has level {level:.2f}')
