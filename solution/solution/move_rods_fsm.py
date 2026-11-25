@@ -2,34 +2,19 @@ from typing import Callable, Generator
 from week_4.robochart_fsm import Clock, Const, FINAL, Input, Operation, Param, Required, Scope, \
     State, StateMachine
 from solution.power_maintainer import MAX_POWER, in_reactor, next_rod_move, rods_to_read
+from solution.pool_helper import CANAL_Y, apply_crane_wall_safety, route, POOL_CENTERS
 
 
 CARRY_CRANE_Z = -4.0 # when carrying a rod to clear all cells
 LOWERED_CRANE_Z = -6.38 # to touch the rod before attachment
-EMPTY_TRAVEL_CRANE_Z = -3.0 # to prevent crane colliding with sides of canal when empty
 IDENTIFY_POOL_CRANE_Z = -0.1 # crane fully raised
-READ_CRANE_Z = -6.05 # to read rod level
+HOVER_CRANE_Z = -6.05
 
-CRANE_WIDTH = 0.5
-WALL_CRANE_SAFETY_MARGIN = 0.01 # always keep this far from pool walls and dividers when close to pool rim
-                                # Must be less than 0.025 since the cells give the rods this much play (0.4 - 0.35) / 2 = 0.025
-
-CANAL_Y = 0.0 # the cannal bit between reator and storage
-
-POOL_CENTERS = {'reactor': -5.75, 'storage': 5.75}
-POOL_X = {'reactor': (-9.0, -2.5), 'storage': (2.5, 9.0)}
-POOL_Y = (-2.25, 2.25)
-
-def apply_crane_wall_safety(x, y):
-    # Used to keep the crane inside the wall as it was colliding with the wall when moving for cells along it (is only applied for cells close to the wall)
-    bottom_x, top_x = POOL_X['reactor'] if x < 0 else POOL_X['storage']
-    safety_margin = CRANE_WIDTH / 2.0 + WALL_CRANE_SAFETY_MARGIN
-    return (min(max(x, bottom_x + safety_margin), top_x - safety_margin),
-            min(max(y, POOL_Y[0] + safety_margin), POOL_Y[1] - safety_margin))
-
+EXACT_TOLERANCE = 0.0 # uses the position and velocity tolerance values in crane_controller.py
+WAYPOINT_TOLERANCE = 0.05
 
 class CranePlatform(Scope):
-    send_target: Callable[[float, float, float], None] # publish [x, y, z] on /crane/position_commands
+    send_target: Callable[[float, float, float, float], None] # publish [x, y, z] on /crane/position_commands
     set_carrying: Callable[[bool], None] # publish on /crane/carrying
     release_brake: Callable[[], Generator] # /crane/winch/brake/release
     engage_brake: Callable[[], Generator] # /crane/winch/brake/engage
@@ -49,8 +34,9 @@ class MoveTo(Operation):
     x: Param[float]
     y: Param[float]
     z: Param[float]
+    tolerance: Param[float]
 
-    send_target: Required[Callable[[float, float, float], None]]
+    send_target: Required[Callable[[float, float, float, float], None]]
     at_target: Required[Input[None]]
 
     def initial(self):
@@ -59,9 +45,9 @@ class MoveTo(Operation):
     class Moving(State):
 
         def entry(self):
-            self.send_target(self.x, self.y, self.z)
+            self.send_target(self.x, self.y, self.z, self.tolerance)
             # Give crane_controller time to get new_target
-            yield from self.wait(1)
+            yield from self.wait(2)
 
         def transitions(self):
             if self.at_target.triggered():
@@ -95,7 +81,7 @@ class MoveRods(StateMachine):
     read_cells: list[str] = [] # cells of the fuel rods to read the level of next
 
     # robot platform
-    send_target: Required[Callable[[float, float, float], None]]
+    send_target: Required[Callable[[float, float, float, float], None]]
     set_carrying: Required[Callable[[bool], None]]
     release_brake: Required[Callable[[], Generator]]
     engage_brake: Required[Callable[[], Generator]]
@@ -144,8 +130,10 @@ class MoveRods(StateMachine):
     class IdentifyPools(State):
 
         def entry(self):
+            x, y = self.crane_pose()
+            yield from self.move_to(x, y, IDENTIFY_POOL_CRANE_Z, WAYPOINT_TOLERANCE)
             for pool, centre_x in POOL_CENTERS.items():
-                yield from self.move_to(centre_x, CANAL_Y, IDENTIFY_POOL_CRANE_Z)
+                yield from self.move_to(centre_x, CANAL_Y, IDENTIFY_POOL_CRANE_Z, EXACT_TOLERANCE)
                 cells = yield from self.identify_pool(pool, centre_x, CANAL_Y, IDENTIFY_POOL_CRANE_Z)
                 self.cells = {**self.cells, **cells}
                 self.logger.info(f'{pool.capitalize()} pool cells identified')
@@ -153,6 +141,10 @@ class MoveRods(StateMachine):
             storage_levels = {cell: self.storage_rod_level for cell, rod in self.cells.items()
                               if not in_reactor(cell) and rod == 'fuel'}
             self.rod_levels = {**storage_levels, **self.rod_levels}
+
+            # hover over cells
+            x, y = self.crane_pose()
+            yield from self.move_to(x, y, HOVER_CRANE_Z, WAYPOINT_TOLERANCE)
 
         def transitions(self):
             cell_types = {cell_type: list(self.cells.values()).count(cell_type)
@@ -234,11 +226,17 @@ class MoveRods(StateMachine):
 
         def entry(self):
             if self.carrying:
-                x, y = self.detach_crane_position()
-                yield from self.move_to(x, y, CARRY_CRANE_Z)
+                x, y, z = self.detach_crane_position(), CARRY_CRANE_Z
             else:
-                x, y = self.attach_crane_position()
-                yield from self.move_to(x, y, EMPTY_TRAVEL_CRANE_Z)
+                x, y, z = self.attach_crane_position(), HOVER_CRANE_Z
+
+            crane_x, _ = self.crane_pose()
+            waypoints = route(crane_x, x, y, WAYPOINT_TOLERANCE)
+            for i, (waypoint_x, waypoint_y) in enumerate(waypoints):
+                # pass through the canal waypoints but stop exactly above cell
+                last = i == len(waypoints) - 1
+                yield from self.move_to(waypoint_x, waypoint_y, z,
+                                        EXACT if last else WAYPOINT_TOLERANCE)
 
         def transitions(self):
             return self.LowerToCell
@@ -250,7 +248,7 @@ class MoveRods(StateMachine):
                 x, y = self.detach_crane_position()
             else:
                 x, y = self.attach_crane_position()
-            yield from self.move_to(x, y, LOWERED_CRANE_Z)
+            yield from self.move_to(x, y, LOWERED_CRANE_Z, EXACT_TOLERANCE)
 
         def transitions(self):
             if self.carrying:
@@ -279,15 +277,14 @@ class MoveRods(StateMachine):
 
         def entry(self):
             if self.carrying:
-                x, y = self.attach_crane_position()
-                yield from self.move_to(x, y, CARRY_CRANE_Z)
+                x, y, z = self.attach_crane_position(), CARRY_CRANE_Z
             else:
-                x, y = self.detach_crane_position()
-                yield from self.move_to(x, y, EMPTY_TRAVEL_CRANE_Z)
+                x, y, z = self.detach_crane_position(), HOVER_CRANE_Z
+            yield from self.move_to(x, y, z, WAYPOINT_TOLERANCE)
 
         def transitions(self):
             if self.carrying:
-                return self.MoveToCanal
+                return self.MoveAboveCell
             self.logger.info(f'Moved rod from {self.source_cell} to {self.target_cell}')
             return self.WaitForPowerUpdate
 
@@ -295,30 +292,10 @@ class MoveRods(StateMachine):
 
         def entry(self):
             # as /current_power_level is published once a second wait for it to be updated with the new move
-            yield from self.wait(2)
+            yield from self.wait(12)
 
         def transitions(self):
             return self.NextRodToMove
-
-    class MoveToCanal(State):
-
-        def entry(self):
-            x, _ = apply_crane_wall_safety(self.source_cell_x, self.source_cell_y)
-            yield from self.move_to(x, CANAL_Y, CARRY_CRANE_Z)
-
-        def transitions(self):
-            return self.MoveAlongCanal
-
-    class MoveAlongCanal(State):
-
-        def entry(self):
-            x, _ = apply_crane_wall_safety(self.target_cell_x, self.target_cell_y)
-            yield from self.move_to(x, CANAL_Y, CARRY_CRANE_Z)
-
-        def transitions(self):
-            return self.MoveAboveCell
-            
-    # MoveAboveCell -> LowerToCell
 
     class DetachRod(State):
 
@@ -358,22 +335,22 @@ class MoveRods(StateMachine):
     class ReadRodLevels(State):
 
         def entry(self):
-            for i, cell in enumerate(self.read_cells):
+            for cell in self.read_cells:
                 found, cell_x, cell_y = yield from self.cell_pose(cell)
-                x, y = apply_crane_wall_safety(cell_x, cell_y)
-                if i == 0:
-                    # above first rod before lowering
-                    yield from self.move_to(x, y, EMPTY_TRAVEL_CRANE_Z)
-                # slide from cell to cell
-                yield from self.move_to(x, y, READ_CRANE_Z)
+                # passed through within WAYPOINT_TOLERANCE so kept further from walls
+                x, y = apply_crane_wall_safety(cell_x, cell_y, WAYPOINT_TOLERANCE)
+                # hovering just above the rods
+                crane_x, _ = self.crane_pose()
+                for waypoint_x, waypoint_y in route(crane_x, x, y, WAYPOINT_TOLERANCE):
+                    yield from self.move_to(waypoint_x, waypoint_y, HOVER_CRANE_Z,
+                                            WAYPOINT_TOLERANCE)
+
                 found, level = yield from self.rod_level()
                 if not found:
                     self.logger.warning(f'No fuel rod level read in {cell}')
                     level = 0.0
                 self.rod_levels = {**self.rod_levels, cell: level}
                 self.logger.info(f'Fuel rod in {cell} has level {level:.2f}')
-            x, y = self.crane_pose()
-            yield from self.move_to(x, y, EMPTY_TRAVEL_CRANE_Z)
 
         def transitions(self):
             return self.NextRodToMove
@@ -382,7 +359,7 @@ class MoveRods(StateMachine):
 
         def entry(self):
             # check the power again every few seconds
-            yield from self.wait(5)
+            yield from self.wait(50)
 
         def transitions(self):
             current_power, target_power = self.current_power(), self.target_power()
@@ -390,5 +367,3 @@ class MoveRods(StateMachine):
                 self.logger.warning(f'Power {current_power:.2f}% out of range, replanning')
                 return self.IdentifyPools
             return self.MonitorPower
-
-    # RaiseFromCell -> WaitForPowerUpdate -> NextRodToMove -> LOOP TILL NO RODS TO MOVE -> ReadRodLevels -> LOOP TILL NO RODS TO MOVE -> MonitorPower

@@ -28,9 +28,6 @@ setup(
             'task1 = solution.task1:main',
             'task2 = solution.task2:main',
             'crane_controller = solution.crane_controller:main',
-            'cell_identifier = solution.cell_identifier:main',
-            'power_maintainer = solution.power_maintainer:main',
-            'move_rods_fsm = solution.move_rods_fsm:main',
         ],
     },
 )

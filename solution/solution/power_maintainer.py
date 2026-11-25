@@ -1,4 +1,5 @@
 from solution.cell_identifier import cell_centres
+from solution.pool_helper import pool_of
 
 # Every cells centre (x, y)
 CELL_XY = {name: (x, y) for pool in ('reactor', 'storage') for name, x, y in cell_centres(pool)}
@@ -12,10 +13,8 @@ TRIM_COST = 0.2
 READ_BATCH = 6
 READ_LIMIT = 24
 
-
 def in_reactor(cell):
-    return CELL_XY[cell][0] < 0.0
-
+    return pool_of(CELL_XY[cell][0]) == 'reactor'
 
 def nearest_canal(cells):
     # cell closest to the canal (x = 0, y = 0) to ensure shortest moves

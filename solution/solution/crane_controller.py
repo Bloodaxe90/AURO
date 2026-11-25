@@ -28,6 +28,7 @@ class CraneController(Node):
         # Tolerances for determining if the crane is at the target position and the target velocity is zero, Low since the rod has a 0.025 m play in the cell
         self.position_tolerance = float(self.declare_parameter('position_tolerance', 0.005).value)
         self.velocity_tolerance = float(self.declare_parameter('velocity_tolerance', 0.01).value)
+        self.waypoint_tolerance = 0.0
 
         self.max_error = float(self.declare_parameter('max_error', 1.5).value) # ensuring the crane doesn't move too fast
 
@@ -49,10 +50,14 @@ class CraneController(Node):
         self.carrying = msg.data
 
     def command_callback(self, msg: Float64MultiArray):
-        if len(msg.data) != len(JOINTS):
-            self.get_logger().error("Expected x, y, z for joints bridge_slide, winch_block_slide, winch_lift from /crane/position_commands")
+        if len(msg.data) not in (len(JOINTS), len(JOINTS) + 1):
+            self.get_logger().error('Expected x, y, z and optionally a tolerance on '
+                                    '/crane/position_commands')
             return
-        self.desired_joint_positions = list(msg.data)
+        self.desired_joint_positions = list(msg.data[:len(JOINTS)])
+        # an optional 4th value makes the target use waypoint tolerance, this allows it to move on
+        # from the target almost immediately without stopping if waypoint tolerance is large
+        self.waypoint_tolerance = msg.data[3] if len(msg.data) > len(JOINTS) else 0.0
 
     def joint_callback(self, msg: JointState):
 
@@ -81,10 +86,16 @@ class CraneController(Node):
 
         self.command_pub.publish(Float64MultiArray(data=efforts))
 
-        at_target = all(
-            abs(self.desired_joint_positions[i] - joint_positions[i]) < self.position_tolerance
-            and abs(joint_velocities[i]) < self.velocity_tolerance
-            for i in range(len(JOINTS)))
+        errors = [abs(self.desired_joint_positions[i] - joint_positions[i])
+                  for i in range(len(JOINTS))]
+        if self.waypoint_tolerance > 0.0:
+            # a waypoint
+            at_target = all(error < self.waypoint_tolerance for error in errors)
+        else:
+            # an exact target
+            at_target = all(errors[i] < self.position_tolerance
+                            and abs(joint_velocities[i]) < self.velocity_tolerance
+                            for i in range(len(JOINTS)))
         self.at_target_pub.publish(Bool(data=at_target))
 
 

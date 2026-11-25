@@ -67,7 +67,7 @@ class Task2(Node):
 
         # state machine
         self.timer_period = 0.1
-        self.time_unit = 1
+        self.time_unit = 0.1 # was 1 is now less so i can pass fractions of a second for wait()
         self.move_rod_fsm = MoveRods(self.get_logger(), self.timer_period, self.time_unit,
                                      parent=self.platform,
                                      control_rod_coefficient=control_rod_coefficient,
@@ -107,8 +107,8 @@ class Task2(Node):
 
     # PUBLISHERS
 
-    def send_target(self, x, y, z):
-        self.target_pub.publish(Float64MultiArray(data=[x, y, z]))
+    def send_target(self, x, y, z, tolerance):
+        self.target_pub.publish(Float64MultiArray(data=[x, y, z, tolerance]))
 
     def set_carrying(self, carrying):
         self.carrying_pub.publish(Bool(data=carrying))
