@@ -1,20 +1,29 @@
 from typing import Callable, Generator
 from week_4.robochart_fsm import Clock, Const, FINAL, Input, Operation, Param, Required, Scope, \
     State, StateMachine
-from solution.power_maintainer import MAX_POWER, in_reactor, next_rod_move, rods_to_read
+from solution.power_maintainer import MAX_POWER, new_target_cell, \
+    in_reactor, next_rod_move, rods_to_read
 from solution.pool_helper import CANAL_Y, apply_crane_wall_safety, route, POOL_CENTERS
 
 
 CARRY_CRANE_Z = -4.0 # when carrying a rod to clear all cells
 LOWERED_CRANE_Z = -6.38 # to touch the rod before attachment
 IDENTIFY_POOL_CRANE_Z = -0.1 # crane fully raised
-HOVER_CRANE_Z = -6.05
+HOVER_CRANE_Z = -6.0
 
 EXACT_TOLERANCE = 0.0 # uses the position and velocity tolerance values in crane_controller.py
-WAYPOINT_TOLERANCE = 0.05
+READ_WAYPOINT_TOLERANCE = 0.05 # must be kept low to ensure crane can still read rod levels
+WAYPOINT_TOLERANCE = 0.2 # must still be kept relatively low to allow a raise somewhat before moving after detaching (so not scaping rods)
+
+MOVE_TIMEOUT = 600 # Max time allowed to move between cells (60s)
+LOWER_TIMEOUT = 100 # Max time allowed to lower into a cell (10s)
+
+MAX_LOWER_ATTEMPTS = 3 # Max tried before giving up lowering to a cell
+MAX_SERVICE_ATTEMPTS = 5 # Max service call attempts before giving up on a cell
+
 
 class CranePlatform(Scope):
-    send_target: Callable[[float, float, float, float], None] # publish [x, y, z] on /crane/position_commands
+    send_target: Callable[[float, float, float, float], None] # publish [x, y, z, tolerance] on /crane/position_commands
     set_carrying: Callable[[bool], None] # publish on /crane/carrying
     release_brake: Callable[[], Generator] # /crane/winch/brake/release
     engage_brake: Callable[[], Generator] # /crane/winch/brake/engage
@@ -35,9 +44,13 @@ class MoveTo(Operation):
     y: Param[float]
     z: Param[float]
     tolerance: Param[float]
+    timeout: Param[int]
 
     send_target: Required[Callable[[float, float, float, float], None]]
     at_target: Required[Input[None]]
+    arrived: Required[bool]
+
+    C: Clock
 
     def initial(self):
         return self.Moving
@@ -45,13 +58,20 @@ class MoveTo(Operation):
     class Moving(State):
 
         def entry(self):
-            self.send_target(self.x, self.y, self.z, self.tolerance)
+            self.C.reset()
+            self.send_target(self.x, self.y, self.z, self.tolerance) 
             # Give crane_controller time to get new_target
             yield from self.wait(2)
 
         def transitions(self):
             if self.at_target.triggered():
                 self.at_target.take()
+                self.arrived = True
+                return FINAL
+            if self.C.since() >= self.timeout:
+                self.logger.warning(f'Not at ({self.x:.2f}, {self.y:.2f}, {self.z:.2f}) after '
+                                    f'{self.timeout / 10:.0f} s')
+                self.arrived = False
                 return FINAL
 
 class MoveRods(StateMachine):
@@ -74,6 +94,9 @@ class MoveRods(StateMachine):
     cell_found: bool = False # if cell_pose service call found the cell
     succeeded: bool = False # if last service call 
     carrying: bool = False # if the crane holds the rod
+    arrived: bool = False # if the last move_to got there in time
+
+    attempts: int = 0 # tries at lowering
 
     cells: dict[str, str] = {} # map of every cell in the pool and its type 'fuel', 'control', 'empty'
     rod_offsets: dict[str, list[float]] = {} # where placed rods sit in their cells (initial ones are assumed to be centered)
@@ -92,7 +115,7 @@ class MoveRods(StateMachine):
     identify_pool: Required[Callable[[str, float, float, float], Generator]]
     current_power: Required[Callable[[], float]]
     target_power: Required[Callable[[], float]]
-    rod_level: Required[Callable[[], float]]
+    rod_level: Required[Callable[[], Generator]]
 
     at_target: Required[Input[None]]
 
@@ -131,9 +154,13 @@ class MoveRods(StateMachine):
 
         def entry(self):
             x, y = self.crane_pose()
-            yield from self.move_to(x, y, IDENTIFY_POOL_CRANE_Z, WAYPOINT_TOLERANCE)
+            yield from self.move_to(x, y, IDENTIFY_POOL_CRANE_Z, WAYPOINT_TOLERANCE, MOVE_TIMEOUT)
+            if not self.arrived:
+                return
             for pool, centre_x in POOL_CENTERS.items():
-                yield from self.move_to(centre_x, CANAL_Y, IDENTIFY_POOL_CRANE_Z, EXACT_TOLERANCE)
+                yield from self.move_to(centre_x, CANAL_Y, IDENTIFY_POOL_CRANE_Z, EXACT_TOLERANCE, MOVE_TIMEOUT)
+                if not self.arrived:
+                    return
                 cells = yield from self.identify_pool(pool, centre_x, CANAL_Y, IDENTIFY_POOL_CRANE_Z)
                 self.cells = {**self.cells, **cells}
                 self.logger.info(f'{pool.capitalize()} pool cells identified')
@@ -142,11 +169,10 @@ class MoveRods(StateMachine):
                               if not in_reactor(cell) and rod == 'fuel'}
             self.rod_levels = {**storage_levels, **self.rod_levels}
 
-            # hover over cells
-            x, y = self.crane_pose()
-            yield from self.move_to(x, y, HOVER_CRANE_Z, WAYPOINT_TOLERANCE)
-
         def transitions(self):
+            if not self.arrived:
+                return self.Fault
+
             cell_types = {cell_type: list(self.cells.values()).count(cell_type)
                       for cell_type in ('fuel', 'control', 'empty')}
             self.logger.info(f'Pool Cell Counts: {cell_types}')
@@ -226,9 +252,11 @@ class MoveRods(StateMachine):
 
         def entry(self):
             if self.carrying:
-                x, y, z = self.detach_crane_position(), CARRY_CRANE_Z
+                x, y = self.detach_crane_position()
+                z = CARRY_CRANE_Z
             else:
-                x, y, z = self.attach_crane_position(), HOVER_CRANE_Z
+                x, y = self.attach_crane_position()
+                z = HOVER_CRANE_Z
 
             crane_x, _ = self.crane_pose()
             waypoints = route(crane_x, x, y, WAYPOINT_TOLERANCE)
@@ -236,28 +264,94 @@ class MoveRods(StateMachine):
                 # pass through the canal waypoints but stop exactly above cell
                 last = i == len(waypoints) - 1
                 yield from self.move_to(waypoint_x, waypoint_y, z,
-                                        EXACT if last else WAYPOINT_TOLERANCE)
+                                        EXACT_TOLERANCE if last else WAYPOINT_TOLERANCE, MOVE_TIMEOUT)
+                if not self.arrived:
+                    return
 
         def transitions(self):
-            return self.LowerToCell
+            if not self.arrived:
+                return self.Fault
+
+            def action():
+                self.attempts = 0
+            return self.LowerToCell, action
 
     class LowerToCell(State):
 
         def entry(self):
+            self.attempts = self.attempts + 1
             if self.carrying:
                 x, y = self.detach_crane_position()
             else:
                 x, y = self.attach_crane_position()
-            yield from self.move_to(x, y, LOWERED_CRANE_Z, EXACT_TOLERANCE)
+            yield from self.move_to(x, y, LOWERED_CRANE_Z, EXACT_TOLERANCE, LOWER_TIMEOUT)
 
         def transitions(self):
+            if self.arrived:
+                def action():
+                    self.attempts = 0
+                if self.carrying:
+                    return self.DetachRod, action
+                return self.AttachRod, action
+
+            failed_cell = self.target_cell if self.carrying else self.source_cell
+            if self.attempts < MAX_LOWER_ATTEMPTS:
+                self.logger.warning(f'Failed to lower to cell {failed_cell} (try {self.attempts}), '
+                                    'trying again')
+                return self.RetryLower
+
+            # something is in the way so cell map is wrong
+            self.logger.error(f'Failed to lower to cell {failed_cell} after {MAX_LOWER_ATTEMPTS} attempts, giving up')
+            
+            # setting failed cell to unknown so it can be re identified next time
+            def action():
+                self.cells = {**self.cells, failed_cell: 'unknown'}
+            return self.AbandonCell, action
+
+    class RetryLower(State):
+
+        def entry(self):
+            # straight back up to setup for lowering again
             if self.carrying:
-                return self.DetachRod
-            return self.AttachRod
+                (x, y), z = self.detach_crane_position(), CARRY_CRANE_Z
+            else:
+                (x, y), z = self.attach_crane_position(), HOVER_CRANE_Z
+            yield from self.move_to(x, y, z, EXACT_TOLERANCE, MOVE_TIMEOUT)
+
+        def transitions(self):
+            if not self.arrived:
+                return self.Fault
+            return self.LowerToCell
+
+    class AbandonCell(State):
+
+        def entry(self):
+            # straight back up
+            x, y = self.crane_pose()
+            yield from self.move_to(x, y, CARRY_CRANE_Z if self.carrying else HOVER_CRANE_Z,
+                                    WAYPOINT_TOLERANCE, MOVE_TIMEOUT)
+
+        def transitions(self):
+            if not self.arrived:
+                return self.Fault
+            if not self.carrying:
+                return self.NextRodToMove
+
+            # if still holding the rod take it to another empty cell in the same pool
+            target_cell = new_target_cell(self.cells, self.target_cell)
+            if target_cell is None:
+                self.logger.error(f'No empty cells for rod from {self.source_cell}')
+                return self.Fault
+
+            def action():
+                self.logger.info(f'Plan changed moving rod to {target_cell}')
+                self.target_cell = target_cell
+            return self.GetTarget, action
 
     class AttachRod(State):
 
         def entry(self):
+            self.attempts = self.attempts + 1
             self.succeeded = yield from self.attach()
 
         def transitions(self):
@@ -270,19 +364,34 @@ class MoveRods(StateMachine):
                     self.carrying = True
                     self.set_carrying(True)
                 return self.RaiseFromCell, action
-            self.logger.error('Failed to attach rod')
-            return self.AttachRod
+
+            if self.attempts < MAX_SERVICE_ATTEMPTS:
+                self.logger.warning(f'Failed to attach rod at cell {self.source_cell} (try {self.attempts}), trying again')
+                return self.AttachRod
+
+            # no rod there so cell map is wrong
+            self.logger.error(f'Failed to attach rod at cell {self.source_cell} after {MAX_SERVICE_ATTEMPTS} attempts, giving up')
+            
+            # setting failed cell to unknown so it can be re identified next time
+            def action():
+                self.cells = {**self.cells, self.source_cell: 'unknown'}
+            return self.AbandonCell, action
 
     class RaiseFromCell(State):
 
         def entry(self):
             if self.carrying:
-                x, y, z = self.attach_crane_position(), CARRY_CRANE_Z
+                x, y = self.attach_crane_position()
+                z = CARRY_CRANE_Z
             else:
-                x, y, z = self.detach_crane_position(), HOVER_CRANE_Z
-            yield from self.move_to(x, y, z, WAYPOINT_TOLERANCE)
+                x, y = self.detach_crane_position()
+                z = HOVER_CRANE_Z
+            yield from self.move_to(x, y, z, WAYPOINT_TOLERANCE, MOVE_TIMEOUT)
 
         def transitions(self):
+            if not self.arrived:
+                return self.Fault
+
             if self.carrying:
                 return self.MoveAboveCell
             self.logger.info(f'Moved rod from {self.source_cell} to {self.target_cell}')
@@ -300,6 +409,7 @@ class MoveRods(StateMachine):
     class DetachRod(State):
 
         def entry(self):
+            self.attempts = self.attempts + 1
             self.succeeded = yield from self.detach()
 
         def transitions(self):
@@ -329,8 +439,13 @@ class MoveRods(StateMachine):
                     self.carrying = False
                     self.set_carrying(False)
                 return self.RaiseFromCell, action
-            self.logger.error('Failed to detach rod')
-            return self.DetachRod
+
+            if self.attempts < MAX_SERVICE_ATTEMPTS:
+                self.logger.warning(f'Failed to detach rod (try {self.attempts}), trying again')
+                return self.DetachRod
+
+            self.logger.error(f'Failed to detach rod after {MAX_SERVICE_ATTEMPTS} attempts, giving up')
+            return self.Fault
 
     class ReadRodLevels(State):
 
@@ -341,9 +456,16 @@ class MoveRods(StateMachine):
                 x, y = apply_crane_wall_safety(cell_x, cell_y, WAYPOINT_TOLERANCE)
                 # hovering just above the rods
                 crane_x, _ = self.crane_pose()
-                for waypoint_x, waypoint_y in route(crane_x, x, y, WAYPOINT_TOLERANCE):
+                waypoints = route(crane_x, x, y, WAYPOINT_TOLERANCE)
+                for i, (waypoint_x, waypoint_y) in enumerate(waypoints):
+                    
+                    # pass through any canal waypoints but use a smaller tolerance for rod level reads
+                    last = i == len(waypoints) - 1
                     yield from self.move_to(waypoint_x, waypoint_y, HOVER_CRANE_Z,
-                                            WAYPOINT_TOLERANCE)
+                                            READ_WAYPOINT_TOLERANCE if last else WAYPOINT_TOLERANCE,
+                                            MOVE_TIMEOUT)
+                    if not self.arrived:
+                        return
 
                 found, level = yield from self.rod_level()
                 if not found:
@@ -353,7 +475,19 @@ class MoveRods(StateMachine):
                 self.logger.info(f'Fuel rod in {cell} has level {level:.2f}')
 
         def transitions(self):
+            if not self.arrived:
+                return self.Fault
             return self.NextRodToMove
+
+    class Fault(State):
+
+        def entry(self):
+            # if catastrophic failure stop the crane so it doesnt keep moving
+            self.logger.error('Mega Fail, stopping crane')
+            yield from self.engage_brake()
+
+        def transitions(self):
+            return FINAL
 
     class MonitorPower(State):
 

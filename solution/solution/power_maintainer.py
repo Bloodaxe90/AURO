@@ -134,3 +134,9 @@ def rods_to_read(cells, rod_levels, current_power, target_power, crane_x, crane_
         unknown.remove(cell)
         x, y = CELL_XY[cell]
     return reads
+
+def new_target_cell(cells, target_cell):
+    # An empty cell in the same pool as target_cell
+    empty = [cell for cell, rod in cells.items()
+             if rod == 'empty' and in_reactor(cell) == in_reactor(target_cell)]
+    return nearest_canal(empty) if empty else None

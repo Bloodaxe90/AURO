@@ -28,6 +28,8 @@ setup(
             'task1 = solution.task1:main',
             'task2 = solution.task2:main',
             'crane_controller = solution.crane_controller:main',
+            'gain_tuner = solution.tuning.gain_tuner:main',
+            'plot_gain_tuner_results = solution.tuning.plot_gain_tuner_results:main',
         ],
     },
 )

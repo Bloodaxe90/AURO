@@ -18,6 +18,10 @@ from cv_bridge import CvBridge
 from solution.move_rods_fsm import CranePlatform, MoveRods
 from solution.cell_identifier import identify_pool_cells
 
+import numpy as np
+
+IDENTIFY_POOL_FRAMES = 5
+
 class Task2(Node):
 
     def __init__(self):
@@ -63,7 +67,7 @@ class Task2(Node):
             send_target=self.send_target, set_carrying=self.set_carrying,
             release_brake=self.release_brake, engage_brake=self.engage_brake, attach=self.attach, detach=self.detach,
             cell_pose=self.cell_pose, crane_pose=self.crane_pose, identify_pool=self.identify_pool,
-            current_power=self.current_power, target_power=self.target_power, rod_power=self.rod_power)
+            current_power=self.current_power, target_power=self.target_power, rod_level=self.rod_level)
 
         # state machine
         self.timer_period = 0.1
@@ -157,11 +161,15 @@ class Task2(Node):
     # other stuff
 
     def identify_pool(self, pool, x, y, z):
-        # forget older frames and wait for the next one
-        self.image = None
-        while self.image is None:
-            yield
-        image = self.bridge.imgmsg_to_cv2(self.image, desired_encoding='bgr8')
+        # camera noise is random in each frame so use median of several frames
+        frames = []
+        while len(frames) < IDENTIFY_POOL_FRAMES:
+            # forget older frames and wait for the next one
+            self.image = None
+            while self.image is None:
+                yield
+            frames.append(self.bridge.imgmsg_to_cv2(self.image, desired_encoding='bgr8'))
+        image = np.median(np.stack(frames), axis=0).astype(np.uint8)
         return identify_pool_cells(image, pool, x, y, z)
 
     def control_loop(self):
