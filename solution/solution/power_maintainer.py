@@ -5,8 +5,12 @@ CELL_XY = {name: (x, y) for pool in ('reactor', 'storage') for name, x, y in cel
 
 MAX_POWER = 100.0 # %
 
-# How much (% of maximum power) one extra rod move wastes
-WASTE_PER_MOVE = 0.5
+MOVE_COST = 0.5 # How much one rod move costs
+TRIM_COST = 0.2
+
+# Reactor fuel rods to read the level of at a time and in all
+READ_BATCH = 6
+READ_LIMIT = 24
 
 
 def in_reactor(cell):
@@ -41,7 +45,7 @@ def best_move_combination(total_reactor_fuel, current_num_removed_control_rods, 
                 continue
             total_rods_moved = num_removed_control_rods + num_added_storage_rods
             if predicted_power >= target_power:
-                cost = (predicted_power - target_power) + WASTE_PER_MOVE * total_rods_moved
+                cost = (predicted_power - target_power) + MOVE_COST * total_rods_moved
                 if cheapest is None or cost < cheapest[0]:
                     cheapest = (cost, num_removed_control_rods, num_added_storage_rods)
             elif closest is None or (predicted_power, -total_rods_moved) > closest[0]:
@@ -54,7 +58,7 @@ def best_move_combination(total_reactor_fuel, current_num_removed_control_rods, 
 
 
 def next_rod_move(cells, current_power, target_power, control_rod_coefficient,
-                                 full_fuel_rod_power, storage_rod_level):
+                                 full_fuel_rod_power, storage_rod_level, rod_levels):
     '''
     Chooses the next rod to move as (source cell, target cell, reason) or None
 
@@ -78,13 +82,25 @@ def next_rod_move(cells, current_power, target_power, control_rod_coefficient,
     total_reactor_fuel = current_power / fuel_multiplier # sum of the inserted fuel rod power
     addable_storage_rod_power = full_fuel_rod_power * storage_rod_level / 100.0
 
-    # If above the target power and we can remove a fuel rod from the reactor and put it in storage and that will not drop us below the target power, do that first as its 100% safe
+    # If at or above the target power trim the waste by taking out the reactor fuel rods of those whose
+    # level is known then take away the most power without going below the target
     if current_power >= target_power:
-        max_power_change = full_fuel_rod_power * fuel_multiplier # maximum possible power decrease / increase
-        if reactor_fuel_rods and storage_empty_cells and (
-                current_power - max_power_change >= target_power or current_power > MAX_POWER):
-            return nearest_canal(reactor_fuel_rods), nearest_canal(storage_empty_cells), 'trim waste'
-        return None
+        if not storage_empty_cells:
+            return None
+        if current_power > MAX_POWER and reactor_fuel_rods:
+            return nearest_canal(reactor_fuel_rods), nearest_canal(storage_empty_cells), 'over 100%'
+        waste = current_power - target_power
+        trims = []
+        for cell in reactor_fuel_rods:
+            if cell in rod_levels:
+                drop = full_fuel_rod_power * rod_levels[cell] / 100.0 * fuel_multiplier
+                if TRIM_COST < drop <= waste:
+                    trims.append((drop, cell))
+        if not trims:
+            return None
+        drop, cell = max(trims)
+        return (cell, nearest_canal(storage_empty_cells),
+                f'Trimming waste: level {rod_levels[cell]:.2f} rod takes away {drop:.2f}%')
 
     num_removable_control_rods, num_addable_storage_rods = best_move_combination(
         total_reactor_fuel, num_removed_control_rods,
@@ -102,3 +118,20 @@ def next_rod_move(cells, current_power, target_power, control_rod_coefficient,
                 f'Removing control rod: planned {num_removable_control_rods} control rod, {num_addable_storage_rods} storage rod moves')
     return (nearest_canal(storage_fuel_rods), nearest_canal(reactor_empty_cells),
             f'Adding storage rod: planned {num_removable_control_rods} control rod, {num_addable_storage_rods} storage rod moves')
+
+def rods_to_read(cells, rod_levels, current_power, target_power, crane_x, crane_y):
+    # The next reactor fuel rods to read the level of nearest first from the crane at
+    read = [cell for cell in rod_levels if in_reactor(cell)]
+    if current_power - target_power <= TRIM_COST or len(read) >= READ_LIMIT:
+        return []
+    unknown = [c for c, rod in cells.items() if in_reactor(c) and rod == 'fuel'
+               and c not in rod_levels]
+    # nearest neighbour order
+    reads = []
+    x, y = crane_x, crane_y
+    while unknown and len(reads) < READ_BATCH:
+        cell = min(unknown, key=lambda c: abs(CELL_XY[c][0] - x) + abs(CELL_XY[c][1] - y))
+        reads.append(cell)
+        unknown.remove(cell)
+        x, y = CELL_XY[cell]
+    return reads

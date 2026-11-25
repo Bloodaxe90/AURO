@@ -11,7 +11,7 @@ from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy
 from std_msgs.msg import Bool, Float64, Float64MultiArray
 from ros_gz_interfaces.srv import ControlWorld
-from assessment_interfaces.srv import CellPose
+from assessment_interfaces.srv import CellPose, RodPowerLevel
 from sensor_msgs.msg import Image, JointState
 
 from cv_bridge import CvBridge
@@ -56,13 +56,14 @@ class Task2(Node):
         self.brake_engage_client = self.create_client(ControlWorld, '/crane/winch/brake/engage')
         self.attach_client = self.create_client(ControlWorld, '/crane/winch/attach')
         self.detach_client = self.create_client(ControlWorld, '/crane/winch/detach')
+        self.rod_level_client = self.create_client(RodPowerLevel, '/crane/winch/rod_power_level')
 
         # platform of state machine
         self.platform = CranePlatform(
             send_target=self.send_target, set_carrying=self.set_carrying,
             release_brake=self.release_brake, engage_brake=self.engage_brake, attach=self.attach, detach=self.detach,
             cell_pose=self.cell_pose, crane_pose=self.crane_pose, identify_pool=self.identify_pool,
-            current_power=self.current_power, target_power=self.target_power)
+            current_power=self.current_power, target_power=self.target_power, rod_power=self.rod_power)
 
         # state machine
         self.timer_period = 0.1
@@ -133,6 +134,11 @@ class Task2(Node):
     def cell_pose(self, cell):
         response = yield from self.call_service(self.cell_client, CellPose.Request(cell=cell))
         return response.success, response.centre.x, response.centre.y
+
+    def rod_level(self):
+        # level of the fuel rod below the winch, if the winch is close enough above it
+        response = yield from self.call_service(self.rod_level_client, RodPowerLevel.Request())
+        return response.success, response.power_level
         
     def call_service(self, client, request):
         # check server is up

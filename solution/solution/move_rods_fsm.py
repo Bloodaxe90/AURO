@@ -1,14 +1,14 @@
 from typing import Callable, Generator
 from week_4.robochart_fsm import Clock, Const, FINAL, Input, Operation, Param, Required, Scope, \
     State, StateMachine
-
-from solution.power_maintainer import next_rod_move
+from solution.power_maintainer import MAX_POWER, in_reactor, next_rod_move, rods_to_read
 
 
 CARRY_CRANE_Z = -4.0 # when carrying a rod to clear all cells
 LOWERED_CRANE_Z = -6.38 # to touch the rod before attachment
 EMPTY_TRAVEL_CRANE_Z = -3.0 # to prevent crane colliding with sides of canal when empty
 IDENTIFY_POOL_CRANE_Z = -0.1 # crane fully raised
+READ_CRANE_Z = -6.05 # to read rod level
 
 CRANE_WIDTH = 0.5
 WALL_CRANE_SAFETY_MARGIN = 0.01 # always keep this far from pool walls and dividers when close to pool rim
@@ -40,6 +40,7 @@ class CranePlatform(Scope):
     identify_pool: Callable[[str, float, float, float], Generator]
     current_power: Callable[[], float] # /current_power_level
     target_power: Callable[[], float] # /target_power_level
+    rod_level: Callable[[], Generator] # /crane/winch/rod_power_level
 
     # True on /crane/at_target and cleared at the end of each cycle if not used
     at_target: Input[None] = Input(keep='cycle')
@@ -90,6 +91,8 @@ class MoveRods(StateMachine):
 
     cells: dict[str, str] = {} # map of every cell in the pool and its type 'fuel', 'control', 'empty'
     rod_offsets: dict[str, list[float]] = {} # where placed rods sit in their cells (initial ones are assumed to be centered)
+    rod_levels: dict[str, float] = {} # known levels of fuel rods by the cell they are in
+    read_cells: list[str] = [] # cells of the fuel rods to read the level of next
 
     # robot platform
     send_target: Required[Callable[[float, float, float], None]]
@@ -103,6 +106,7 @@ class MoveRods(StateMachine):
     identify_pool: Required[Callable[[str, float, float, float], Generator]]
     current_power: Required[Callable[[], float]]
     target_power: Required[Callable[[], float]]
+    rod_level: Required[Callable[[], float]]
 
     at_target: Required[Input[None]]
 
@@ -146,6 +150,10 @@ class MoveRods(StateMachine):
                 self.cells = {**self.cells, **cells}
                 self.logger.info(f'{pool.capitalize()} pool cells identified')
 
+            storage_levels = {cell: self.storage_rod_level for cell, rod in self.cells.items()
+                              if not in_reactor(cell) and rod == 'fuel'}
+            self.rod_levels = {**storage_levels, **self.rod_levels}
+
         def transitions(self):
             cell_types = {cell_type: list(self.cells.values()).count(cell_type)
                       for cell_type in ('fuel', 'control', 'empty')}
@@ -164,19 +172,30 @@ class MoveRods(StateMachine):
                 return None # wait for the reactor monitor to publish the power levels
 
             move = next_rod_move(self.cells, current_power, target_power, self.control_rod_coefficient,
-                                 self.full_fuel_rod_power, self.storage_rod_level)
+                                 self.full_fuel_rod_power, self.storage_rod_level, self.rod_levels)
 
-            if move is None:
-                self.logger.info(f'Done after {self.move_counter} moves: power {current_power:.2f}%, '
-                                 f'target {target_power:.2f}%')
-                return FINAL
-            def action():
-                self.source_cell, self.target_cell, reason = move
-                self.move_counter = self.move_counter + 1
-                self.logger.info(f'Power {current_power:.2f}% target {target_power:.2f}%: {reason}, moving '
-                                 f'{self.cells[self.source_cell]} rod {self.source_cell} -> '
-                                 f'{self.target_cell}')
-            return self.GetSource, action
+            if move is not None:
+                def action():
+                    self.source_cell, self.target_cell, reason = move
+                    self.move_counter = self.move_counter + 1
+                    self.logger.info(f'Power {current_power:.2f}% target {target_power:.2f}%: '
+                                     f'{reason}, moving {self.cells[self.source_cell]} rod '
+                                     f'{self.source_cell} -> {self.target_cell}')
+                return self.GetSource, action
+            
+            # no move worth making with the levels known: read some more, if worth it
+            reads = rods_to_read(self.cells, self.rod_levels, current_power, target_power,
+                                   *self.crane_pose())
+            if reads:
+                def action():
+                    self.read_cells = reads
+                    self.logger.info(f'Power {current_power:.2f}% target {target_power:.2f}%: '
+                                     f'reading the levels of {", ".join(reads)}')
+                return self.ReadRodLevels, action
+
+            self.logger.info(f'Target reached after {self.move_counter} moves: power '
+                             f'{current_power:.2f}%, target {target_power:.2f}%')
+            return self.MonitorPower
 
     class GetSource(State):
 
@@ -322,6 +341,13 @@ class MoveRods(StateMachine):
                     offsets = {cell: offset for cell, offset in self.rod_offsets.items()
                                if cell != self.source_cell}
                     self.rod_offsets = {**offsets, self.target_cell: offset}
+
+                    # ensure rods level moves with too
+                    if self.source_cell in self.rod_levels:
+                        levels = {cell: level for cell, level in self.rod_levels.items()
+                                  if cell != self.source_cell}
+                        self.rod_levels = {**levels,
+                                           self.target_cell: self.rod_levels[self.source_cell]}
                     
                     self.carrying = False
                     self.set_carrying(False)
@@ -329,4 +355,40 @@ class MoveRods(StateMachine):
             self.logger.error('Failed to detach rod')
             return self.DetachRod
 
-    # RaiseFromCell -> WaitForPowerUpdate -> NextRodToMove -> LOOP TILL NO RODS TO MOVE -> FINAL
+    class ReadRodLevels(State):
+
+        def entry(self):
+            for i, cell in enumerate(self.read_cells):
+                found, cell_x, cell_y = yield from self.cell_pose(cell)
+                x, y = apply_crane_wall_safety(cell_x, cell_y)
+                if i == 0:
+                    # above first rod before lowering
+                    yield from self.move_to(x, y, EMPTY_TRAVEL_CRANE_Z)
+                # slide from cell to cell
+                yield from self.move_to(x, y, READ_CRANE_Z)
+                found, level = yield from self.rod_level()
+                if not found:
+                    self.logger.warning(f'No fuel rod level read in {cell}')
+                    level = 0.0
+                self.rod_levels = {**self.rod_levels, cell: level}
+                self.logger.info(f'Fuel rod in {cell} has level {level:.2f}')
+            x, y = self.crane_pose()
+            yield from self.move_to(x, y, EMPTY_TRAVEL_CRANE_Z)
+
+        def transitions(self):
+            return self.NextRodToMove
+
+    class MonitorPower(State):
+
+        def entry(self):
+            # check the power again every few seconds
+            yield from self.wait(5)
+
+        def transitions(self):
+            current_power, target_power = self.current_power(), self.target_power()
+            if current_power < target_power or current_power > MAX_POWER:
+                self.logger.warning(f'Power {current_power:.2f}% out of range, replanning')
+                return self.IdentifyPools
+            return self.MonitorPower
+
+    # RaiseFromCell -> WaitForPowerUpdate -> NextRodToMove -> LOOP TILL NO RODS TO MOVE -> ReadRodLevels -> LOOP TILL NO RODS TO MOVE -> MonitorPower
