@@ -26,10 +26,10 @@ setup(
     entry_points={
         'console_scripts': [
             'task1 = solution.task1:main',
-            'task2 = solution.task2:main',
-            'crane_controller = solution.crane_controller:main',
-            'gain_tuner = solution.tuning.gain_tuner:main',
-            'plot_gain_tuner_results = solution.tuning.plot_gain_tuner_results:main',
+            'task2 = solution.task2.task2:main',
+            'crane_controller = solution.task2.crane_controller:main',
+            'gain_tuner = solution.task2.tuning.gain_tuner:main',
+            'plot_gain_tuner_results = solution.task2.tuning.plot_gain_tuner_results:main',
         ],
     },
 )

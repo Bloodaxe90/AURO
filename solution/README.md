@@ -8,7 +8,7 @@ ros2 launch solution solution.launch.py task:=task2
 ```
 
 * [solution.launch.py](launch/solution.launch.py) includes `assessment.launch.py` and starts this task's node. New launch arguments go in that launch file.
-* [task1.py](solution/task1.py) and [task2.py](solution/task2.py) are sketches: both wait for the simulation to be ready.
+* [task1.py](solution/task1.py) and [task2.py](solution/task2/task2.py) are sketches: both wait for the simulation to be ready.
 
 The launch file sets `use_sim_time` for all of this package's nodes. Do not remove this directive or things may break.
 
