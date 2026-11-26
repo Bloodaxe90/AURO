@@ -210,7 +210,7 @@ class MoveRods(StateMachine):
     class NextRodToMove(State):
 
         def entry(self):
-            pass
+            yield # so on_chagne logs state
 
         def transitions(self):
             current_power, target_power = self.current_power(), self.target_power()
@@ -273,6 +273,9 @@ class MoveRods(StateMachine):
             return self.NextRodToMove
 
     class CheckValidRodMove(State):
+
+        def entry(self):
+            yield # so on_chagne logs state
 
         def transitions(self):
             if self.cells[self.source_cell] == 'empty':
