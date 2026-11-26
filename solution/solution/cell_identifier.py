@@ -28,7 +28,7 @@ def cell_centres(pool):
 
 def identify_cell(h, s, v):
     if 15 <= h <= 35 and s > 100:
-        return "control" # yellow 
+        return "control" # yellow
     if 85 <= h <= 110 and 15 <= s <= 70 and v > 200:
         return "fuel" # light blue
     return "empty"
@@ -36,7 +36,7 @@ def identify_cell(h, s, v):
 
 
 def identify_pool_cells(image, pool, camera_x, camera_y, winch_lift):
-    # maps cell name to "control", "fuel" or "empty" based on the median HSV at the 
+    # maps cell name to "control", "fuel" or "empty" based on the median HSV at the
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     rod_top_z = ROD_SEATED_Z + ROD_HALF_HEIGHT
     focal_length_px = CAMERA_WIDTH / (2 * np.tan(CAMERA_FOV / 2))

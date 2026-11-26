@@ -21,8 +21,8 @@ class CraneController(Node):
                    float(self.declare_parameter('Kp_y', 1400.0).value),
                    float(self.declare_parameter('Kp_z', 938.0).value)]
         self.Kd = [float(self.declare_parameter('Kd_x', 3300.0).value),
-                   float(self.declare_parameter('Kd_y', 1350.0).value), 
-                   float(self.declare_parameter('Kd_z', 700.0).value)] 
+                   float(self.declare_parameter('Kd_y', 1350.0).value),
+                   float(self.declare_parameter('Kd_z', 700.0).value)]
 
         # Tolerances for determining if the crane is at the target position and the target velocity is zero, Low since the rod has a 0.025 m play in the cell
         self.position_tolerance = float(self.declare_parameter('position_tolerance', 0.005).value)

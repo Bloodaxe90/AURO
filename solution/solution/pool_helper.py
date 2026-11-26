@@ -1,3 +1,5 @@
+TOTAL_CONTROL_RODS = 24 # total control rods in the world
+
 POOL_CENTERS = {'reactor': -5.75, 'storage': 5.75}
 POOL_X = {'reactor': (-9.0, -2.5), 'storage': (2.5, 9.0)} # inside faces of the pool walls
 POOL_Y = (-2.25, 2.25)

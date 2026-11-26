@@ -21,6 +21,8 @@ from solution.cell_identifier import identify_pool_cells
 import numpy as np
 
 IDENTIFY_POOL_FRAMES = 5
+CAMERA_TIMEOUT = 50 # Max time allowed for the camera to return frame (5s)
+
 
 class Task2(Node):
 
@@ -106,7 +108,7 @@ class Task2(Node):
     def current_power_callback(self, msg):
         self.current_power_value = msg.data
 
-    def target_power_callback(self, msg):   
+    def target_power_callback(self, msg):
         self.target_power_value = msg.data
 
     # PUBLISHERS
@@ -143,12 +145,12 @@ class Task2(Node):
         # level of the fuel rod below the winch, if the winch is close enough above it
         response = yield from self.call_service(self.rod_level_client, RodPowerLevel.Request())
         return response.success, response.power_level
-        
+
     def call_service(self, client, request):
         # check server is up
         while not client.service_is_ready():
             yield
-            
+
         future = client.call_async(request)
         try:
             while not future.done():
@@ -166,7 +168,12 @@ class Task2(Node):
         while len(frames) < IDENTIFY_POOL_FRAMES:
             # forget older frames and wait for the next one
             self.image = None
+            waited = 0
             while self.image is None:
+                if waited >= IMAGE_TIMEOUT:
+                    self.get_logger().warning(f'Failed to recieve any frames after {CAMERA_TIMEOUT/100}s, giving up')
+                    return None
+                waited = waited + 1
                 yield
             frames.append(self.bridge.imgmsg_to_cv2(self.image, desired_encoding='bgr8'))
         image = np.median(np.stack(frames), axis=0).astype(np.uint8)
@@ -189,7 +196,7 @@ class Task2(Node):
     def target_power(self):
         return self.target_power_value
 
-    # pre-existing code    
+    # pre-existing code
 
     def on_ready(self, msg):
         self.simulation_ready = msg.data

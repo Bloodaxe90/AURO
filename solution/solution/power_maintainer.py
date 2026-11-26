@@ -7,11 +7,11 @@ CELL_XY = {name: (x, y) for pool in ('reactor', 'storage') for name, x, y in cel
 MAX_POWER = 100.0 # %
 
 MOVE_COST = 0.5 # How much one rod move costs
-TRIM_COST = 0.2
+
+MIN_TRIM = 0.2 # if a trim causes the power to drop less than this % then stop trimming
 
 # Reactor fuel rods to read the level of at a time and in all
 READ_BATCH = 6
-READ_LIMIT = 24
 
 def in_reactor(cell):
     return pool_of(CELL_XY[cell][0]) == 'reactor'
@@ -89,7 +89,7 @@ def next_rod_move(cells, current_power, target_power, control_rod_coefficient,
         for cell in reactor_fuel_rods:
             if cell in rod_levels:
                 drop = full_fuel_rod_power * rod_levels[cell] / 100.0 * fuel_multiplier
-                if TRIM_COST < drop <= waste:
+                if MIN_TRIM < drop <= waste:
                     trims.append((drop, cell))
         if not trims:
             return None
@@ -118,7 +118,7 @@ def next_rod_move(cells, current_power, target_power, control_rod_coefficient,
 
 def rods_to_read(cells, rod_levels, read_cells, current_power, target_power, crane_x, crane_y):
     # next reactor fuel rods to read the level of (nearest first)
-    if current_power - target_power <= TRIM_COST or len(read_cells) >= READ_LIMIT:
+    if current_power - target_power <= MIN_TRIM:
         return []
     unknown = [c for c, rod in cells.items() if in_reactor(c) and rod == 'fuel'
                and c not in rod_levels and c not in read_cells]

@@ -15,7 +15,6 @@ matplotlib.use('Agg')  # works withought display
 import matplotlib.pyplot as plt
 
 def read_data(filename: str) -> tuple[list[float], list[float]]:
-    """Return the time and position columns of the CSV file."""
     times = []
     positions = []
     with open(filename, newline='') as csv_file:

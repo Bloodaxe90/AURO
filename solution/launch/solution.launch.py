@@ -24,6 +24,8 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node, SetParameter
 
+from assessment.tasks import parse_replacement_level
+
 TASKS = ('task1', 'task2')
 
 # Arguments of assessment.launch.py, with their defaults here. To see all that it has:
@@ -110,8 +112,11 @@ def launch_task(context):
 
     if task == 'task2':
         nodes.append(Node(package='solution', executable='crane_controller', output='screen'))
-        for name in ('control_rod_coefficient', 'replacement_level', 'maximum_power_level'):
+        for name in ('control_rod_coefficient', 'maximum_power_level'):
             parameters[name] = float(assessment.get(name, 0))
+        
+        # same parsing as assessment.launch.py
+        parameters['replacement_level'] = parse_replacement_level(assessment.get('replacement_level', '100'))
 
     return [
         # Included launch files see the arguments of this one: without forwarding off, task2 would
