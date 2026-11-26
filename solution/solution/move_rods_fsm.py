@@ -179,7 +179,7 @@ class MoveRods(StateMachine):
                 self.logger.info(f'{pool.capitalize()} pool cells identified')
 
             # every control rod must be found
-            self.pool_identified = list(self.cells.values()).count('control') == NUM_CONTROL_RODS
+            self.pool_identified = list(self.cells.values()).count('control') == TOTAL_CONTROL_RODS
             if not self.pool_identified:
                 return   
 

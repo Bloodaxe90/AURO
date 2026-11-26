@@ -2,7 +2,6 @@ import rclpy
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from sensor_msgs.msg import JointState
-from std_msgs.msg import Float64MultiArray
 from std_msgs.msg import Bool, Float64MultiArray
 
 # Only the joint for the crane

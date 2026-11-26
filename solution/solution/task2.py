@@ -170,8 +170,8 @@ class Task2(Node):
             self.image = None
             waited = 0
             while self.image is None:
-                if waited >= IMAGE_TIMEOUT:
-                    self.get_logger().warning(f'Failed to recieve any frames after {CAMERA_TIMEOUT/100}s, giving up')
+                if waited >= CAMERA_TIMEOUT:
+                    self.get_logger().warning(f'Failed to recieve any frames after {CAMERA_TIMEOUT / 10:.0f}s, giving up')
                     return None
                 waited = waited + 1
                 yield
