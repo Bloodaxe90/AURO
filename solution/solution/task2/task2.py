@@ -15,8 +15,8 @@ from assessment_interfaces.srv import CellPose, RodPowerLevel
 from sensor_msgs.msg import Image, JointState
 
 from cv_bridge import CvBridge
-from solution.move_rods_fsm import CranePlatform, MoveRods
-from solution.cell_identifier import identify_pool_cells
+from solution.task2.move_rods_fsm import CranePlatform, MoveRods
+from solution.task2.cell_identifier import identify_pool_cells
 
 import numpy as np
 

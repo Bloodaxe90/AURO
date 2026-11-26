@@ -1,5 +1,5 @@
-from solution.cell_identifier import cell_centres
-from solution.pool_helper import pool_of
+from solution.task2.cell_identifier import cell_centres
+from solution.task2.pool_helper import pool_of
 
 # Every cells centre (x, y)
 CELL_XY = {name: (x, y) for pool in ('reactor', 'storage') for name, x, y in cell_centres(pool)}

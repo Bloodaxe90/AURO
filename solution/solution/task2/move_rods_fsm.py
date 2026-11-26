@@ -1,9 +1,9 @@
 from typing import Callable, Generator
 from week_4.robochart_fsm import Clock, Const, FINAL, Input, Operation, Param, Required, Scope, \
     State, StateMachine
-from solution.power_maintainer import MAX_POWER, MIN_TRIM, new_target_cell, \
+from solution.task2.power_maintainer import MAX_POWER, MIN_TRIM, new_target_cell, \
     in_reactor, next_rod_move, rods_to_read
-from solution.pool_helper import CANAL_Y, apply_crane_wall_safety, route, POOL_CENTERS, TOTAL_CONTROL_RODS
+from solution.task2.pool_helper import CANAL_Y, apply_crane_wall_safety, route, POOL_CENTERS, TOTAL_CONTROL_RODS
 
 
 CARRY_CRANE_Z = -4.0 # when carrying a rod to clear all cells

@@ -9,7 +9,7 @@ Saves the graph as steps.png
 import argparse
 import csv
 from typing import Optional
-from solution.tuning.gain_tuner import TOLERANCE
+from solution.task2.tuning.gain_tuner import TOLERANCE
 import matplotlib
 matplotlib.use('Agg')  # works withought display
 import matplotlib.pyplot as plt
