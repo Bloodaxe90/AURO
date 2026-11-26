@@ -295,7 +295,7 @@ Only one simulation can run at a time: the launch fails, saying so, if Gazebo is
 ## Sample solution schema
 A minimal code schema for a potential solution is included in the package
 [`solution`](../solution/): [task1.py](../solution/solution/task1.py) and
-[task2.py](../solution/solution/task2/task2.py), which wait for the simulation to be ready. Your solution must be launched using the
+[task2.py](../solution/solution/task2.py), which wait for the simulation to be ready. Your solution must be launched using the
 [`solution.launch.py`](../solution/launch/solution.launch.py) file. That file reuses the launch
 file `assessment.launch.py`, that launches the simulation environment. For your submission,
 [`solution.launch.py`](../solution/launch/solution.launch.py) must support all existing
