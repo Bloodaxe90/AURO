@@ -146,6 +146,7 @@ class MoveRods(StateMachine):
     class ReleaseBrake(State):
 
         def entry(self):
+            self.attempts = self.attempts + 1
             self.succeeded = yield from self.release_brake()
 
         def transitions(self):
@@ -153,8 +154,11 @@ class MoveRods(StateMachine):
                 def action():
                     self.attempts = 0
                 return self.IdentifyPools, action
-            self.logger.error('Failed to release brake')
-            return self.ReleaseBrake
+            if self.attempts < MAX_SERVICE_ATTEMPTS:
+                self.logger.warning(f'Failed to release brake (try {self.attempts}), trying again')
+                return self.ReleaseBrake
+            self.logger.error(f'Failed to release brake after {MAX_SERVICE_ATTEMPTS} attempts, giving up')
+            return self.Fault
 
     class IdentifyPools(State):
 

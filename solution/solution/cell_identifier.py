@@ -36,8 +36,7 @@ def identify_cell(h, s, v):
 
 
 def identify_pool_cells(image, pool, camera_x, camera_y, winch_lift):
-    # maps cell name to "control", "fuel" or "empty" based on the median HSV at the
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    # maps cell name to "control", "fuel" or "empty" based on the median HSV at the cells center
     rod_top_z = ROD_SEATED_Z + ROD_HALF_HEIGHT
     focal_length_px = CAMERA_WIDTH / (2 * np.tan(CAMERA_FOV / 2))
     depth = (WINCH_TOP_Z + winch_lift + CAMERA_ABOVE_WINCH) - rod_top_z
@@ -47,7 +46,10 @@ def identify_pool_cells(image, pool, camera_x, camera_y, winch_lift):
         cell_column_pxl = int(round((CAMERA_WIDTH / 2 - (y - camera_y) * pixels_per_metre)))
         cell_row_height_pxl = int(round((CAMERA_HEIGHT / 2 - (x - camera_x) * pixels_per_metre)))
         half_sample = SAMPLE_SIZE // 2
-        patch = hsv[cell_row_height_pxl - half_sample:cell_row_height_pxl + half_sample + 1, cell_column_pxl - half_sample:cell_column_pxl + half_sample + 1].reshape(-1, 3)
-        h, s, val = np.median(patch, axis=0)
+        patch = image[cell_row_height_pxl - half_sample:cell_row_height_pxl + half_sample + 1,
+                      cell_column_pxl - half_sample:cell_column_pxl + half_sample + 1].reshape(-1, 3)
+        # median colour first then HSV as a noisy white pixel would get a random hue
+        median_bgr = np.median(patch, axis=0).astype(np.uint8)
+        h, s, val = cv2.cvtColor(median_bgr.reshape(1, 1, 3), cv2.COLOR_BGR2HSV)[0, 0]
         cells[name] = identify_cell(h, s, val)
     return cells
