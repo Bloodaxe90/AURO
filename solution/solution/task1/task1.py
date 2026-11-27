@@ -23,9 +23,18 @@ from action_msgs.msg import GoalStatus
 from geometry_msgs.msg import PoseStamped, TwistStamped
 from nav2_msgs.action import NavigateToPose
 
-from solution.task1.environemt_helper import map_to_world, world_to_map
+from solution.task1.environment_helper import map_to_world, world_to_map
 from solution.task1.fetch_end_effector_fsm import FetchEndEffector, RobotPlatform
 
+from sensor_msgs.msg import Image
+
+from cv_bridge import CvBridge
+from solution.task1.tag_identifier import detect_tags
+
+import numpy as np
+
+TAG_IDENTIFY_FRAMES = 5
+CAMERA_TIMEOUT = 50 # Max time allowed for the camera to return frame (5s)
 
 class Task1(Node):
 
@@ -40,6 +49,12 @@ class Task1(Node):
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
+        self.bridge = CvBridge()
+        self.image = None
+
+        # subscribers
+        self.create_subscription(Image, '/camera/image_raw', self.image_callback, 10)
+
         # publishers
         self.cmd_vel_pub = self.create_publisher(TwistStamped, '/cmd_vel', 10)
 
@@ -48,7 +63,8 @@ class Task1(Node):
 
         # platform of state machine
         self.platform = RobotPlatform(
-            navigate_to=self.navigate_to, robot_pose=self.robot_pose, stop=self.stop)
+            navigate_to=self.navigate_to, identify_tags=self.identify_tags,
+            robot_pose=self.robot_pose, stop=self.stop)
 
         # state machine
         self.timer_period = 0.1
@@ -72,6 +88,11 @@ class Task1(Node):
         msg.header.frame_id = 'base_footprint'
         msg.twist.linear.x = linear
         self.cmd_vel_pub.publish(msg)
+
+    # CALL BACKS
+
+    def image_callback(self, msg):
+        self.image = msg
 
     # ACTION CALLS
 
@@ -105,6 +126,23 @@ class Task1(Node):
 
     # other stuff
 
+    def identify_tags(self):
+        # camera noise is random in each frame so use median of several frames
+        frames = []
+        while len(frames) < TAG_IDENTIFY_FRAMES:
+            # forget older frames and wait for the next one
+            self.image = None
+            waited = 0
+            while self.image is None:
+                if waited >= CAMERA_TIMEOUT:
+                    self.get_logger().warning(f'Failed to recieve any frames after {CAMERA_TIMEOUT / 10:.0f}s, giving up')
+                    return None
+                waited = waited + 1
+                yield
+            frames.append(self.bridge.imgmsg_to_cv2(self.image, desired_encoding='bgr8'))
+        image = np.median(np.stack(frames), axis=0).astype(np.uint8)
+        return detect_tags(image)
+
     def stop(self):
         self.publish_velocity(0.0)
 
@@ -112,9 +150,9 @@ class Task1(Node):
         pose = PoseStamped()
         pose.header.frame_id = 'map'
         pose.header.stamp = self.get_clock().now().to_msg()
+        pose.pose.position.x, pose.pose.position.y = world_to_map(x, y)
         (pose.pose.orientation.x, pose.pose.orientation.y,
-         pose.pose.orientation.z,
-         pose.pose.orientation.w) = quaternion_from_euler(0, 0, yaw)
+         pose.pose.orientation.z, pose.pose.orientation.w) = quaternion_from_euler(0, 0, yaw)
         return pose
 
     def robot_pose(self):
