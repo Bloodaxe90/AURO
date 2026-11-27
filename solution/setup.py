@@ -25,7 +25,7 @@ setup(
     license='TODO: License declaration',
     entry_points={
         'console_scripts': [
-            'task1 = solution.task1:main',
+            'task1 = solution.task1.task1:main',
             'task2 = solution.task2.task2:main',
             'crane_controller = solution.task2.crane_controller:main',
             'gain_tuner = solution.task2.tuning.gain_tuner:main',

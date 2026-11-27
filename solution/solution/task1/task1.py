@@ -61,7 +61,7 @@ def main():
     try:
         node.wait_for_simulation()
         # If using nav2.
-        # node.start_nav2()
+        node.start_nav2()
         rclpy.spin(node)
     except (KeyboardInterrupt, ExternalShutdownException):
         pass

@@ -48,12 +48,12 @@ ASSESSMENT_ARGUMENTS = {
         'sim_time_log_file': '',
     },
     'task1': {
-        'nav2': 'false',
+        'nav2': 'slam',
         # Not set: the assessment's default, auto, applies: with Nav2, the launch starts it once
         # the simulation is ready. manual: Nav2 waits for a node to start it
         'nav2_start': '',
         'nav2_params': '',
-        'keepout_mask': '',
+        'keepout_mask': 'package://solution/maps/pool_keepout.yaml',
         'end_effectors': 'true',
         'time_limit': '300',  # s of simulation time: 5 minutes
     },
